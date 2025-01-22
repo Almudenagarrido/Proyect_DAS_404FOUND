@@ -1,6 +1,6 @@
 certifi==2021.10.8
-charset-normalizer @ file:///tmp/build/80754af9/charset-normalizer_1630003229654/work
-idna @ file:///tmp/build/80754af9/idna_1637925883363/work
-requests @ file:///opt/conda/conda-bld/requests_1641824580448/work
+charset-normalizer==3.4.1
+idna==3.10
+requests==2.32.3
 tzdata==2024.1
-urllib3 @ file:///C:/ci/urllib3_1650639883891/work
+urllib3==2.3.0
