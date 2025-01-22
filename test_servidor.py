@@ -36,6 +36,7 @@ class TestSimpleHTTPServer(unittest.TestCase):
         self.assertIn("<h1>Hola desde un servidor Python</h1>", response.text)
         self.assertIn("<p>Este es un servidor simple que responde a solicitudes GET.</p>", response.text)
         self.assertIn("<img src='https://media.licdn.com/dms/image/v2/C4D22AQEmJ0cieZhCOg/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1652754306303?e=2147483647&v=beta&t=CwS0bhV0QJMjDeGBKslG7FFI-xzl8SEeh0LL8rOJmzI'", response.text)
+        self.assertIn("<p>Web del grupo DAS 404 FOUND.</p>", response.text)
 
 if __name__ == '__main__':
     unittest.main()
