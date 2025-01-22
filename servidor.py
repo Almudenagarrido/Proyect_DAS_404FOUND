@@ -20,6 +20,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             <h1>Hola desde un servidor Python</h1>
             <p>Este es un servidor simple que responde a solicitudes GET.</p>
             <img src='https://media.licdn.com/dms/image/v2/C4D22AQEmJ0cieZhCOg/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1652754306303?e=2147483647&v=beta&t=CwS0bhV0QJMjDeGBKslG7FFI-xzl8SEeh0LL8rOJmzI'> 
+            <p>Web del grupo DAS 404 FOUND.</p> 
         </body>
         </html>"""
 
