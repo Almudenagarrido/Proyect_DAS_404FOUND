@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="sp">
+  <head>
+    <meta charset="utf-8">
+    <title>Formulario de Registro</title>
+  </head>
+  <body>
+    <header><h1>Formulario de Registro</h1></header>
+    <main>
+      <form action="">
+        <fieldset>
+          <legend>Por favor, rellena los siguientes datos para registrarte en el sistema</legend>
+        
+        <br><label for="name">Nombre: </label><br>
+        <input type="text" id="name" required placeholder="Pepito" pattern="[A-Za-z]*"><br><br>
+        
+        <label for="surname">Apellidos: </label><br>
+        <input type="text" id="surname" required placeholder="Pérez" pattern="[A-Za-z]*"><br><br>
+
+        <label for="mail">Correo electrónico: </label><br>
+        <input type="text" id="mail" required placeholder="pepitoperez@gmail.com" pattern="[A-Za-z0-9]*@gmail.com"><br><br>
+
+        <label for="user">Usuario: </label><br>
+        <input type="text" id="user" required placeholder="PetitoP" pattern="[A-Za-z0-9]*"><br><br>
+
+        <label for="birthday">Fecha de nacimiento: </label><br>
+        <input type="date" id="birthday" required><br><br>
+
+        <label for="direction">Dirección: </label><br>
+        <input type="text" id="direction" required placeholder="Calle Estrella 12, Madrid"><br><br>
+
+        <label for="payment">Datos de pago: </label><br>
+        <input type="text" id="payment" required><br><br>
+
+        <label for="psw">Contraseña: </label><br>
+        <input type="password" id="psw" required minlength="8"><br><br>
+        
+        <label for="confirmation">Confirma la contraseña: </label><br>
+        <input type="password" id="confirmation" required minlength="8"><br><br>
+        
+        <label for="upimg">Carga una imagen: </label>
+        <input type="file" id="upimg" name="filename" required><br><br>
+
+        <input type="submit" value="Aceptar"> &nbsp;&nbsp;
+        <input type="reset" value="Limpiar"> &nbsp;&nbsp;
+        <a href=""><input type="button" id="return" value="Volver a Inicio"></a><br>
+
+        </fieldset>
+      </form>
+    </main>
+    <footer>
+      <p>Creado por <b>Lucía Gámir & Almudena Garrido</b> <i>- 2025</i></p>
+    </footer>
+  </body>
+</html>
