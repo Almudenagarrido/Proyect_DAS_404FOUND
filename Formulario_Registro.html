@@ -2,11 +2,26 @@
 <html lang="sp">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Formulario de Registro</title>
+    <style>
+      header {
+          background-color: #8ab8b5;
+          color: rgb(26, 53, 58);
+          padding: 15px;
+          text-align: center;
+      }
+      body  {
+        background-color: #a9b9b8b6;
+      }
+  </style>
   </head>
   <body>
-    <header><h1>Formulario de Registro</h1></header>
+    <header>
+      <h1>Formulario de Registro</h1>
+    </header>
     <main>
+      <h2>Crea tu cuenta en el sistema</h2>
       <form action="">
         <fieldset>
           <legend>Por favor, rellena los siguientes datos para registrarte en el sistema</legend>
@@ -18,7 +33,7 @@
         <input type="text" id="surname" required placeholder="Pérez" pattern="[A-Za-z]*"><br><br>
 
         <label for="mail">Correo electrónico: </label><br>
-        <input type="text" id="mail" required placeholder="pepitoperez@gmail.com" pattern="[A-Za-z0-9]*@gmail.com"><br><br>
+        <input type="email" id="mail" required placeholder="pepitoperez@gmail.com"><br><br>
 
         <label for="user">Usuario: </label><br>
         <input type="text" id="user" required placeholder="PetitoP" pattern="[A-Za-z0-9]*"><br><br>
@@ -43,7 +58,7 @@
 
         <input type="submit" value="Aceptar"> &nbsp;&nbsp;
         <input type="reset" value="Limpiar"> &nbsp;&nbsp;
-        <a href=""><input type="button" id="return" value="Volver a Inicio"></a><br>
+        <a href="Formulario_Login.html"><input type="button" id="return" value="Inicio de Sesion"></a><br>
 
         </fieldset>
       </form>
