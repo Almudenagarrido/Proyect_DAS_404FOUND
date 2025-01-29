@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sp">
+<html lang="es">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,6 +9,14 @@
   <body>
     <header>
       <h1>Formulario de Registro</h1>
+      <nav>
+        <ul>
+          <li><a href="#">Menú</a></li>
+          <li><a href="Formulario_Login.html">Inicio</a></li>
+          <li><a href="Formulario_Registro.html">Registro</a></li>
+          <li><a href="">Contacto</a></li>
+        </ul>
+      </nav>
     </header>
     <main>
       <h2>Crea tu cuenta en el sistema</h2>
@@ -19,11 +27,14 @@
         <br><label for="name">Nombre: </label><br>
         <input type="text" id="name" required placeholder="Pepito" pattern="[A-Za-z]*"><br><br>
         
-        <label for="surname">Apellidos: </label><br>
+        <label for="surname">Apellido: </label><br>
         <input type="text" id="surname" required placeholder="Pérez" pattern="[A-Za-z]*"><br><br>
 
         <label for="mail">Correo electrónico: </label><br>
         <input type="email" id="mail" required placeholder="pepitoperez@gmail.com"><br><br>
+
+        <label for="telephone">Número de teléfono: </label><br>
+        <input type="tel" id="telephone" required placeholder="607 54 23 67"><br><br>
 
         <label for="user">Usuario: </label><br>
         <input type="text" id="user" required placeholder="PetitoP" pattern="[A-Za-z0-9]*"><br><br>
@@ -48,7 +59,7 @@
 
         <input type="submit" value="Aceptar"> &nbsp;&nbsp;
         <input type="reset" value="Limpiar"> &nbsp;&nbsp;
-        <a href="Formulario_Login.html"><input type="button" id="return" value="Volver a inicio"></a><br>
+        <input type="button" id="return" value="Inicio de Sesión" onclick="window.location.href='Formulario_Login.html';" />
 
         </fieldset>
       </form>
