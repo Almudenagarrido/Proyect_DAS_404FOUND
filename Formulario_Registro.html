@@ -8,15 +8,49 @@
   </head>
   <body>
     <header>
-      <h1>Página de subastas</h1>
       <nav>
-        <ul>
-          <li><a href="#">Menú</a></li>
-          <li><a href="Formulario_Login.html">Log in</a></li>
-          <li><a href="Formulario_Registro.html">Registro</a></li>
-          <li><a href="">Contacto</a></li>
-        </ul>
+          <ul class="nav">         
+              <li class="logo">
+                  <a href="Inicio.html">
+                      <img src="imagen_capibara.webp" alt="Logo" class="logo">
+                  </a>
+              </li>
+              <li>
+                  <form action="" method="get">
+                      <input type="text" name="search" placeholder="Buscar productos..">
+                      <button type="submit">🔍</button>
+                  </form>
+              </li>
+              <li>
+                  <div class="dropdown">
+                      <button class="dropbtn">Identifícate <i class="fa fa-caret-down"></i></button>
+                      <div class="dropdown-content">
+                          <a href="Formulario_Login.html">Inicio de sesión</a>
+                          <a href="Formulario_Registro.html">Registro</a>
+                      </div>
+                  </div>
+              </li>
+          </ul>
       </nav>
+      <nav>
+          <ul>
+              <li>
+                  <a href="">Menú</a>
+              </li>
+              <li>
+                  <ul>
+                      <li><a href="">Mis pujas</a></li>
+                      <li><a href="">Subastas guardadas</a></li>
+                      <li><a href="">Subastas recientes</a></li>
+                      <li><a href="">Historial de compras</a></li>
+                      <li><a href="">Calendario subastas</a></li>
+                  </ul>
+              </li>
+              <li>
+                  <a href="">🛒</a>
+              </li>
+          </ul>
+      </nav>         
     </header>
     <main>
       <h2>Crea tu cuenta en el sistema</h2>
@@ -35,6 +69,34 @@
 
         <label for="telephone">Número de teléfono: </label><br>
         <input type="tel" id="telephone" required placeholder="607 54 23 67"><br><br>
+
+        <label for="dni">DNI:</label><br>
+        <input type="text" id="dni" required placeholder="89234378Z"><br><br>
+
+        <label for="city">Ciudad:</label><br>
+        <div class="dropdown">
+          <select name="cities" id="city-select">
+            <option value="andalucia">Andalucía</option>
+            <option value="aragon">Aragón</option>
+            <option value="asturias">Principado de Asturias</option>
+            <option value="balears">Illes Balears</option>
+            <option value="canarias">Canarias</option>
+            <option value="cantabria">Cantabria</option>
+            <option value="castilla-leon">Castilla y León</option>
+            <option value="castilla-la-mancha">Castilla-La Mancha</option>
+            <option value="cataluna">Cataluña</option>
+            <option value="valencia">Comunitat Valenciana</option>
+            <option value="extremadura">Extremadura</option>
+            <option value="galicia">Galicia</option>
+            <option value="madrid">Comunidad de Madrid</option>
+            <option value="murcia">Región de Murcia</option>
+            <option value="navarra">Comunidad Foral de Navarra</option>
+            <option value="pais-vasco">País Vasco</option>
+            <option value="la-rioja">La Rioja</option>
+            <option value="ceuta">Ciudad Autónoma de Ceuta</option>
+            <option value="melilla">Ciudad Autónoma de Melilla</option>
+          </select>
+        </div><br><br>
 
         <label for="user">Usuario: </label><br>
         <input type="text" id="user" required placeholder="PetitoP" pattern="[A-Za-z0-9]*"><br><br>
@@ -59,7 +121,7 @@
 
         <input type="submit" value="Aceptar"> &nbsp;&nbsp;
         <input type="reset" value="Limpiar"> &nbsp;&nbsp;
-        <input type="button" id="return" value="Inicio de Sesión" onclick="window.location.href='Inicio.html';" />
+        <input type="button" id="return" value="Inicio de Sesión" onclick="window.location.href='Formulario_Login.html';" />
 
         </fieldset>
       </form>
