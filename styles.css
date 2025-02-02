@@ -14,7 +14,8 @@ body {
 footer {
     background-color: #8ab8b5;
     color: rgb(26, 53, 58);
-    padding-left: 10px;
+    font-size: 14px;
+    padding-left: 16px;
     text-align: left;
     width: 100%;
     bottom: 0;
