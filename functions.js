@@ -6,8 +6,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let camposValidos = comprobarCampos();
         let correoValido = validarCorreo();
+        let dniValido = validarDNI();
 
-        if (camposValidos && correoValido) {
+        if (camposValidos && correoValido && dniValido) {
             form.submit();
         }
     });
@@ -43,7 +44,7 @@ function validarCorreo() {
     const mailPattern = /^[a-zA-Z0-9._%+-]+@comillas\.edu$/;
 
     if (!mailPattern.test(mailInput.value.trim())) {
-        valid = false
+        valid = false;
         mailInput.value = "";
         mailInput.placeholder = "<usuario>@comillas.edu";
         mailInput.style.border = "2px solid red";
@@ -52,6 +53,27 @@ function validarCorreo() {
     else {
         mailInput.style.border = "";
         mailInput.style.color = "";
+    }
+
+    return valid;
+}
+
+function validarDNI() {
+    let valid = true;
+
+    const dniInput = document.getElementById("dni");
+
+    const dniPattern = /^([0-9]{8})([A-Z]{1})$/;
+
+    if (!dniPattern.test(dniInput.value.trim())) {
+        valid = false;
+        dniInput.placeholder = "45345465Y";
+        dniInput.style.border = "2px solid red";
+        dniInput.style.color = "red";
+    }
+    else {
+        dniInput.style.border = "";
+        dniInput.style.color = "";
     }
 
     return valid;
