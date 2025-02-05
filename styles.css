@@ -9,7 +9,7 @@ body {
     background-color: #cbdad9b6;
     font-family: 'Inter', sans-serif;
     font-weight: bold;
-    min-height: 98vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
@@ -51,8 +51,6 @@ nav ul {
     width: 100%;
 }
 
-
-
 nav li {
     display: flex;
     justify-content: center;
@@ -60,7 +58,7 @@ nav li {
     padding: 0 15px;
 }
 
-.nav-bottom{
+.nav-bottom {
     justify-content: space-around;
 }
 
@@ -94,7 +92,7 @@ nav.nav-bottom li a {
     font-size: 15px;
     font-weight: bold;
     padding: 4px 8px;
-} 
+}
 
 nav li a:hover,
 .dropdown .dropbtn:hover {
@@ -176,4 +174,38 @@ nav li a:hover,
     padding: 5px 10px;
     font-size: 18px;
     font-weight: bold;
+}
+
+nav li a:hover {
+    background-color: #afcccc;
+    font-size: 16px;
+}
+
+input:focus {
+    border-color: #5d5d5d;
+    outline: none;
+}
+
+.hide_span {
+    color: red;
+    display: none;
+    font-family: "Georgia";
+    font-size: 13px;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+.shake {
+    animation: shake 0.3s ease-in-out;
+}
+
+input {
+    border-radius: 5px;
+    border-color: #cbcbcb;
 }
