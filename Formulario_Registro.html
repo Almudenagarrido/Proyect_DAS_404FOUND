@@ -34,7 +34,8 @@
         <input type="text" id="dni" placeholder="54327401B"><br><br>
 
         <label for="mail">Correo electrónico *</label><br>
-        <input type="email" id="mail" placeholder="usuario@comillas.edu"><br><br>
+        <input type="email" id="mail" placeholder="usuario@comillas.edu"><br>
+        <span id="spanMail" class="hide_span">El correo debe de ser del formato: usuario@dominio.com</span><br>
 
         <label for="telephone">Número de teléfono</label><br>
         <input type="tel" id="telephone" placeholder="607 54 23 67"><br><br>
@@ -128,10 +129,11 @@
         <input type="text" id="payment"><br><br>
 
         <label for="psw">Contraseña</label><br>
-        <input type="password" id="psw" minlength="8" placeholder="Contraseña"><br><br>
+        <input type="password" id="psw" placeholder="Contraseña"><br>
+        <span id="spanpswl" class="hide_span">La contraseña tiene que tener al menos 8 caracteres</span><br>
         
         <label for="confirmationpsw">Confirma la contraseña</label><br>
-        <input type="password" id="confirmationpsw" minlength="8" placeholder="Confirmar contraseña"><br>
+        <input type="password" id="confirmationpsw" placeholder="Confirmar contraseña"><br>
         <span id="spanpsw" class="hide_span">Las contraseñas no coinciden</span><br>
         
         <label for="upimg">Carga una imagen: </label>
