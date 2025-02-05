@@ -96,7 +96,6 @@ nav.nav-bottom li a {
 
 nav li a:hover,
 .dropdown .dropbtn:hover {
-    background-color: rgb(22, 76, 69);
     color: rgb(255, 255, 255);
 }
 
@@ -133,7 +132,6 @@ nav li a:hover,
 }
 
 .dropdown-content a:hover {
-    background-color: rgb(22, 76, 69);
     color: rgb(255, 255, 255);
 }
 
@@ -176,10 +174,7 @@ nav li a:hover,
     font-weight: bold;
 }
 
-nav li a:hover {
-    background-color: #afcccc;
-    font-size: 16px;
-}
+
 
 input:focus {
     border-color: #5d5d5d;
