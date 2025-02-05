@@ -6,7 +6,9 @@ header {
 }
 
 body  {
-    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     background-color: #a9b9b8b6;
     font-family: "Georgia";
 }
@@ -16,6 +18,7 @@ footer {
     color: rgb(26, 53, 58);
     padding: 20px;
     text-align: left;
+    margin-top: auto;
 }
 
 nav ul {
@@ -47,3 +50,33 @@ nav li a:hover {
     background-color: #afcccc;
     font-size: 16px;
   }
+
+input:focus
+{
+    border-color: #5d5d5d;
+    outline: none;
+}
+
+.hide_span {
+    color: red;
+    display: none;
+    font-family: "Georgia";
+    font-size: 13px;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+.shake {
+    animation: shake 0.3s ease-in-out;
+}
+
+input {
+    border-radius: 5px;
+    border-color: #cbcbcb;
+}

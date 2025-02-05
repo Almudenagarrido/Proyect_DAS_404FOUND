@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./styles.css">
+    <script defer src="./functions.js"></script>
     <title>Formulario de Login</title>
   </head>
   <body>
     <header>
-      <h1>Formulario de Login</h1>
       <nav>
         <ul>
           <li><a href="#">Menú</a></li>
@@ -19,15 +19,16 @@
       </nav>
     </header>
     <main>
-      <h2>Introduce tu usuario y contraseña</h2>
+      <h2>Introduce tu usuario y contraseña para acceder a tu cuenta</h2>
       <form action="">
       <fieldset>
         <legend>Por favor, rellena los siguientes datos para iniciar sesión en el sistema</legend>
         <br><label for="user">Usuario: </label>
-        <input type="text" id="user" required><br><br>
+        <input type="text" id="user"><br><br>
         <label for="password">Contraseña: </label>
-        <input type="password" id="password" required minlength="8"><br><br>
-        <input type="submit" value="Enviar"><br>
+        <input type="password" id="password" minlength="8"><br><br>
+        <input type="submit" value="Enviar">&nbsp;&nbsp;
+        <input type="button" id="return" value="Volver" onclick="window.location.href='Inicio.html';" />
       </fieldset>
       </form>
     </main>
