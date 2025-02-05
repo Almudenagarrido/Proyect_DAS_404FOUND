@@ -176,3 +176,42 @@ document.getElementById("confirmationpsw").addEventListener("blur", function () 
         }, 200);
     }
 });
+
+document.getElementById("comunity").addEventListener("change", function() {
+    const comunities_cities = {
+        "Andalucia": ["Sevilla", "Málaga", "Granada", "Córdoba", "Jaén", "Huelva", "Almería", "Linares", "Cádiz"],
+        "Aragon": ["Zaragoza", "Huesca", "Teruel"],
+        "Cataluña": ["Barcelona", "Girona", "Lleida", "Tarragona"],
+        "Madrid": ["Madrid"],
+        "Valencia": ["Alicante", "Valencia", "Castellón"],
+        "Galicia": ["Vigo", "Santiago de Compostela", "A Coruña", "Ourense"],
+        "CastillaLaMancha": [], 
+        "CastillaYLeon": ["Ávila", "Segovia", "Salamanca", "Valladolid", "León", "Palencia", "Burgos"],
+        "Extremadura": ["Badajoz", "Cáceres"],
+        "Murcia": ["Murcia", "Cartagena"],
+        "Navarra": ["Pamplona"],
+        "PaisVasco": ["Bilbao", "Vitoria-Gasteiz", "San Sebastián"],
+        "Cantabria": [],  
+        "LaRioja": ["Logroño"],
+        "IslasCanarias": ["Las Palmas de Gran Canaria", "Santa Cruz de Tenerife"],
+        "IslasBaleares": ["Palma de Mallorca"],
+        "Ceuta": ["Ceuta"],
+        "Melilla": ["Melilla"]
+    }
+    
+    // Coger los valores que queremos
+    const comunity = this.value;
+    const cities = comunities_cities[comunity] || [];
+    const citySelect = document.getElementById("city");
+
+    // Limpiar opciones anteriores
+    citySelect.innerHTML = '<option value="">-- Selecciona una ciudad --</option>';
+
+    // Si hay ciudades, agregarlas al select
+    cities.forEach(city => {
+        const option = document.createElement("option");
+        option.value = city.toLowerCase();
+        option.textContent = city;
+        citySelect.appendChild(option);
+    });
+});
