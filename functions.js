@@ -87,6 +87,52 @@ document.getElementById("mail").addEventListener("blur", function (){
     }
 })
 
+document.getElementById("birthday").addEventListener("blur", function(){
+    const dateInput = this.value;
+    const spanBday = document.getElementById("spanBday");
+
+    const date = new Date(dateInput);
+
+    if (isNaN(date)) {
+        spanBday.textContent = "Fecha no válida";
+        spanBday.style.display = "block";
+        this.style.border = "2px solid red";
+    }
+    else {
+        spanBday.style.display = "none";
+        this.style.border = "";
+    }
+
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    const today = new Date();
+    const today_year = today.getFullYear();
+    const today_month = today.getMonth() + 1;
+    const today_day = today.getDate();
+
+    let age = today_year - year;
+    
+    // Comprobar si ya ha pasado el cumpleaños de este año
+    const monthDifference = today_month - month;
+    const dayDifference = today_day - day;
+    
+    // Si el mes actual es anterior al mes de nacimiento o el mes es el mismo pero el día aún no ha llegado
+    if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
+        age--; // Restar 1 año si aún no ha cumplido años este año
+    }
+
+    // Verificar si la persona tiene 18 años o más
+    if (age < 18){
+        this.style.border = "2px solid red";
+        spanBday.style.display = "block";
+    } 
+    else {
+        spanBday.style.display = "none";
+        this.style.border = "";
+    };
+})
 
 document.getElementById("psw").addEventListener("keyup", function () {
     const spanpswl = document.getElementById("spanpswl");
@@ -191,3 +237,48 @@ document.getElementById("comunity").addEventListener("change", function() {
         citySelect.appendChild(option);
     });
 });
+
+
+document.getElementById("cargar_subastas").addEventListener("click", function() {
+
+    // Contenedor donde se mostrarán las subastas
+    const subastasContainer = document.getElementById("productsContainer");
+    // Llamada a la API o a los datos para obtener las subastas
+    fetch("https://dummyjson.com/products") // O tu URL de subastas
+    .then(response => response.json())  // Parseamos la respuesta JSON
+    .then(data => {
+        // Limpiar el contenedor antes de agregar nuevas subastas
+        subastasContainer.innerHTML = "";
+
+        // Verificamos si los datos contienen productos
+        if (data.products && Array.isArray(data.products)) {
+            // Iterar sobre los productos (subastas)
+            data.products.forEach(product => {
+                // Crear un contenedor para cada subasta
+                const subastaDiv = document.createElement("div");
+                subastaDiv.classList.add("subasta"); // Clases para estilo
+
+                // Añadir contenido del producto/subasta
+                subastaDiv.innerHTML = `
+                    <h3>${product.title}</h3>
+                    <img src="${product.thumbnail}" alt="${product.title}" class="product-thumbnail">
+                    <p><strong>Precio:</strong> $${product.price}</p>
+                    <p><strong>Descuento:</strong> ${product.discountPercentage}%</p>
+                    <p><strong>Stock:</strong> ${product.stock}</p>
+                    <p><strong>Marca:</strong> ${product.brand}</p>
+                    <p><strong>Categoría:</strong> ${product.category}</p>
+                `;
+
+                // Agregar la subasta al contenedor
+                subastasContainer.appendChild(subastaDiv);
+            });
+        } else {
+            subastasContainer.innerHTML = "<p>No se encontraron subastas.</p>";
+        }
+    })
+    .catch(error => {
+        console.error("Error al cargar las subastas:", error);
+        subastasContainer.innerHTML = "<p>Hubo un error al cargar las subastas.</p>";
+    });
+});
+
