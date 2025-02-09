@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./functionsAuctionDetail.js"></script>
+    <title>Detalle Subasta</title>
+  </head>
+  <body>
+    <header>
+        <nav class="nav-top">
+            <ul>         
+                <li>
+                    <a href="index.html">
+                        <img src="fotos/imagen_capibara.webp" alt="Logo" class="logo">
+                    </a>
+                </li>
+                <li class="search-bar">
+                    <form action="" method="get">
+                        <input type="text" name="search" placeholder="Buscar productos..">
+                        <button type="submit">🔍</button>
+                    </form>
+                </li>
+                <li>
+                    <div class="dropdown">
+                        <button class="dropbtn">Identifícate <i class="fa fa-caret-down"></i></button>
+                        <div class="dropdown-content">
+                            <a href="Formulario_Login.html">Inicio de sesión</a>
+                            <a href="Formulario_Registro.html">Registro</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <nav class="nav-bottom">
+            <ul>
+                <li>
+                    <a href="">Menú</a>
+                </li>
+                <li>
+                    <ul>
+                        <li><a href="Subastas_General.html">Subastas</a></li>
+                        <li><a href="">Mis pujas</a></li>
+                        <li><a href="">Subastas guardadas</a></li>
+                        <li><a href="">Subastas recientes</a></li>
+                        <li><a href="">Historial de compras</a></li>
+                        <li><a href="">Calendario subastas</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="" class="cart-icon">🛒</a>
+                </li>
+            </ul>
+        </nav>         
+    </header>
+    <main>
+        <div class="container">
+            <h1>Detalles del Producto</h1>
+            <div class="product-details" id="productDetails">
+                <img src="" alt="Imagen del Producto" id="thumbnail">
+                <div class="info">
+                    <h2 id="title"></h2>
+                    <p id="description"></p>
+                    <p><strong>Precio:</strong> $<span id="price"></span></p>
+                    <p><strong>Descuento:</strong> <span id="discountPercentage"></span>%</p>
+                    <p><strong>Valoración:</strong> <span id="rating"></span></p>
+                    <p><strong>Stock:</strong> <span id="stock"></span></p>
+                    <p><strong>Marca:</strong> <span id="brand"></span></p>
+                    <p><strong>Categoría:</strong> <span id="category"></span></p>
+                    <p><strong>SKU:</strong> <span id="sku"></span></p>
+                    <p><strong>Garantía:</strong> <span id="warrantyInformation"></span></p>
+                    <p><strong>Envío:</strong> <span id="shippingInformation"></span></p>
+                    <p><strong>Estado:</strong> <span id="availabilityStatus"></span></p>
+                </div>
+            </div>
+        </div>        
+    </main>
+    <footer>
+      <p>Creado por <b>Lucía Gámir & Almudena Garrido</b> <i>- 2025</i></p>
+    </footer>
+  </body>
+</html>

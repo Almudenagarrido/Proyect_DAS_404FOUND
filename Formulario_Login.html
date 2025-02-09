@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./styles.css">
+    <title>Formulario de Login</title>
+  </head>
+  <body>
+    <header>
+        <nav class="nav-top">
+            <ul>         
+                <li>
+                    <a href="index.html">
+                        <img src="fotos/imagen_capibara.webp" alt="Logo" class="logo">
+                    </a>
+                </li>
+                <li class="search-bar">
+                    <form action="" method="get">
+                        <input type="text" name="search" placeholder="Buscar productos..">
+                        <button type="submit">🔍</button>
+                    </form>
+                </li>
+                <li>
+                    <div class="dropdown">
+                        <button class="dropbtn">Identifícate <i class="fa fa-caret-down"></i></button>
+                        <div class="dropdown-content">
+                            <a href="Formulario_Login.html">Inicio de sesión</a>
+                            <a href="Formulario_Registro.html">Registro</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <nav class="nav-bottom">
+            <ul>
+                <li>
+                    <a href="">Menú</a>
+                </li>
+                <li>
+                    <ul>
+                        <li id="cargar_subastas"><a href="Subastas_General.html">Subastas</a></li>
+                        <li><a href="">Mis pujas</a></li>
+                        <li><a href="">Subastas guardadas</a></li>
+                        <li><a href="">Subastas recientes</a></li>
+                        <li><a href="">Historial de compras</a></li>
+                        <li><a href="">Calendario subastas</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="" class="cart-icon">🛒</a>
+                </li>
+            </ul>
+        </nav>         
+    </header>
+    <main>
+      <h2>Introduce tu usuario y contraseña para acceder a tu cuenta</h2>
+      <form action="">
+      <fieldset>
+        <legend>Por favor, rellena los siguientes datos para iniciar sesión en el sistema</legend>
+        <br><label for="user">Usuario: </label>
+        <input type="text" id="user"><br><br>
+        <label for="password">Contraseña: </label>
+        <input type="password" id="password" required minlength="8"><br><br>
+        <input type="submit" value="Enviar">&nbsp;&nbsp;
+        <input type="button" id="return" value="Inicio de Sesión" onclick="window.location.href='index.html';" />
+      </fieldset>
+      </form>
+    </main>
+    <footer>
+      <p>Creado por <b>Lucía Gámir & Almudena Garrido</b> <i>- 2025</i></p>
+    </footer>
+  </body>
+</html>
