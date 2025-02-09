@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="./styles.css">
-    <script defer src="./functions.js"></script>
+    <script defer src="./functionsRegister.js"></script>
     <title>Formulario de Registro</title>
   </head>
   <body>
@@ -13,7 +13,7 @@
         <ul>         
             <li>
                 <a href="index.html">
-                    <img src="imagen_capibara.webp" alt="Logo" class="logo">
+                    <img src="fotos/imagen_capibara.webp" alt="Logo" class="logo">
                 </a>
             </li>
             <li class="search-bar">
@@ -40,6 +40,7 @@
             </li>
             <li>
                 <ul>
+                    <li id="cargar_subastas"><a href="Subastas_General.html">Subastas</a></li>
                     <li><a href="">Mis pujas</a></li>
                     <li><a href="">Subastas guardadas</a></li>
                     <li><a href="">Subastas recientes</a></li>
@@ -79,7 +80,8 @@
         <input type="text" id="user" placeholder="PetitoP"><br><br>
 
         <label for="birthday">Fecha de nacimiento</label><br>
-        <input type="date" id="birthday"><br><br>
+        <input type="date" id="birthday"><br>
+        <span id="spanBday" class="hide_span">Debes ser mayor de edad para participar en la subasta</span><br>
 
         <label for="direction">Dirección</label><br>
         <input type="text" id="direction" placeholder="Calle Estrella 12, Madrid"><br><br>
