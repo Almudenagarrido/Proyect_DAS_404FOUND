@@ -11,27 +11,60 @@ form.addEventListener("submit", function (event) {
 });
 
 function comprobarCampos() {
-    
     let valid = true;
-    const requiredFields = ["name", "surname", "dni", "mail"];
+    const requiredFields = ["name", "surname", "dni", "mail", "psw", "confirmationpsw"];
 
     requiredFields.forEach(field => {
         const input = document.getElementById(field);
 
         if (input.value.trim() === "") {
             valid = false;
-            input.placeholder = "Campo obligatorio vacío";
             input.style.border = "2px solid red";
         }
         else {
-            input.style.border = "";
-        }
+            switch (field) {
+                case "name":
+                case "surname":
+                    const namePattern = /^[a-zA-Z]+$/;
+                    if (!namePattern.test(input.value.trim())) {
+                        valid = false;
+                        input.style.border = "2px solid red";
+                    }
+                    break;
 
-        input.addEventListener("input", function () {
-            if (input.value.trim() !== "") {
-                input.style.border = "";
+                case "dni":
+                    const dniPattern = /^([0-9]{8})([A-Z]{1})$/;
+                    if (!dniPattern.test(input.value.trim())) {
+                        valid = false;
+                        input.style.border = "2px solid red";
+                    }
+                    break;
+
+                case "mail":
+                    const mailPattern = /^[a-zA-Z0-9._%+-]+@comillas.edu$/;
+                    if (!mailPattern.test(input.value.trim())) {
+                        valid = false;
+                        input.style.border = "2px solid red";
+                    }
+                    break;
+
+                case "psw":
+                    if (input.value.length < 8) {
+                        valid = false;
+                        input.style.border = "2px solid red";
+                    }
+                    break;
+
+                case "confirmationpsw":
+                    const psw = document.getElementById("psw");
+                    if (input.value !== psw.value) {
+                        valid = false;
+                        input.style.border = "2px solid red";
+                        psw.style.border = "2px solid red";
+                    }
+                    break;
             }
-        });
+        }
     });
 
     return valid;
@@ -59,12 +92,10 @@ document.getElementById("surname").addEventListener("blur", function(){
     }
 })
 
-
 document.getElementById("dni").addEventListener("keyup", function(){
     const dniPattern = /^([0-9]{8})([A-Z]{1})$/;
 
     if (!dniPattern.test(this.value.trim())) {
-        this.placeholder = "54327401B";
         this.style.border = "2px solid red";
     }
     else {
@@ -74,7 +105,7 @@ document.getElementById("dni").addEventListener("keyup", function(){
 
 document.getElementById("mail").addEventListener("blur", function (){
     const mailInput = this.value
-    const mailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const mailPattern = /^[a-zA-Z0-9._%+-]+@comillas.edu/;
     const spanMail = document.getElementById("spanMail");
 
     if (!mailPattern.test(mailInput.trim())){
@@ -113,17 +144,13 @@ document.getElementById("birthday").addEventListener("blur", function(){
     const today_day = today.getDate();
 
     let age = today_year - year;
-    
-    // Comprobar si ya ha pasado el cumpleaños de este año
     const monthDifference = today_month - month;
     const dayDifference = today_day - day;
     
-    // Si el mes actual es anterior al mes de nacimiento o el mes es el mismo pero el día aún no ha llegado
     if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
-        age--; // Restar 1 año si aún no ha cumplido años este año
+        age--;
     }
 
-    // Verificar si la persona tiene 18 años o más
     if (age < 18){
         this.style.border = "2px solid red";
         spanBday.style.display = "block";
@@ -146,7 +173,6 @@ document.getElementById("psw").addEventListener("keyup", function () {
         this.style.border = "";
     }
 })
-
 
 document.getElementById("psw").addEventListener("blur", function () {
     const spanpswl = document.getElementById("spanpswl");
@@ -221,15 +247,12 @@ document.getElementById("comunity").addEventListener("change", function() {
         "Melilla": ["Melilla"]
     }
     
-    // Coger los valores que queremos
     const comunity = this.value;
     const cities = comunities_cities[comunity] || [];
     const citySelect = document.getElementById("city");
 
-    // Limpiar opciones anteriores
     citySelect.innerHTML = '<option value="">-- Selecciona una ciudad --</option>';
 
-    // Si hay ciudades, agregarlas al select
     cities.forEach(city => {
         const option = document.createElement("option");
         option.value = city.toLowerCase();
@@ -237,48 +260,3 @@ document.getElementById("comunity").addEventListener("change", function() {
         citySelect.appendChild(option);
     });
 });
-
-
-document.getElementById("cargar_subastas").addEventListener("click", function() {
-
-    // Contenedor donde se mostrarán las subastas
-    const subastasContainer = document.getElementById("productsContainer");
-    // Llamada a la API o a los datos para obtener las subastas
-    fetch("https://dummyjson.com/products") // O tu URL de subastas
-    .then(response => response.json())  // Parseamos la respuesta JSON
-    .then(data => {
-        // Limpiar el contenedor antes de agregar nuevas subastas
-        subastasContainer.innerHTML = "";
-
-        // Verificamos si los datos contienen productos
-        if (data.products && Array.isArray(data.products)) {
-            // Iterar sobre los productos (subastas)
-            data.products.forEach(product => {
-                // Crear un contenedor para cada subasta
-                const subastaDiv = document.createElement("div");
-                subastaDiv.classList.add("subasta"); // Clases para estilo
-
-                // Añadir contenido del producto/subasta
-                subastaDiv.innerHTML = `
-                    <h3>${product.title}</h3>
-                    <img src="${product.thumbnail}" alt="${product.title}" class="product-thumbnail">
-                    <p><strong>Precio:</strong> $${product.price}</p>
-                    <p><strong>Descuento:</strong> ${product.discountPercentage}%</p>
-                    <p><strong>Stock:</strong> ${product.stock}</p>
-                    <p><strong>Marca:</strong> ${product.brand}</p>
-                    <p><strong>Categoría:</strong> ${product.category}</p>
-                `;
-
-                // Agregar la subasta al contenedor
-                subastasContainer.appendChild(subastaDiv);
-            });
-        } else {
-            subastasContainer.innerHTML = "<p>No se encontraron subastas.</p>";
-        }
-    })
-    .catch(error => {
-        console.error("Error al cargar las subastas:", error);
-        subastasContainer.innerHTML = "<p>Hubo un error al cargar las subastas.</p>";
-    });
-});
-
