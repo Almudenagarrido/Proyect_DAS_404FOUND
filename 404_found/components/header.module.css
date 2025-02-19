@@ -1,0 +1,191 @@
+/* Estilo para el contenedor del header */
+.headerContainer {
+    background-color: rgb(22, 76, 69);
+    color: rgb(204, 204, 204);
+    padding: 20px;
+    text-align: center;
+}
+
+/* Contenedor principal */
+.mainContainer {
+    flex: 1;
+    width: 100vw;
+    height: 50vh;
+}
+
+/* Fondo para la página de inicio */
+.mainIndex {
+    flex: 1;
+    width: 100vw;
+    height: 50vh;
+    background-image: url('/fotos/foto_index.jpg'); 
+    background-size: cover;
+    background-position: center; 
+    background-repeat: no-repeat; 
+}
+
+/* Barra de navegación */
+.navContainer {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    background-color: rgb(22, 76, 69);
+    color: rgb(204, 204, 204);
+    width: 100%;
+    padding: 10px 0;
+}
+
+/* Barra de navegación inferior */
+.navBottom {
+    display: flex;
+    justify-content: space-around;
+}
+
+/* Lista de elementos dentro de la navegación */
+.navList {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: space-between; 
+    gap: 1px;
+    width: 100%;
+}
+
+.navItem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 15px;
+}
+
+/* Logo */
+.logo {
+    height: 50px;
+    width: auto;
+    background: transparent;
+}
+
+/* Estilos de los enlaces de navegación */
+.navLink,
+.dropbtn {
+    width: 100%;
+    padding: 8px;
+    background-color: rgb(22, 76, 69);
+    color: rgb(204, 204, 204);
+    font-size: 19px;
+    font-weight: bold;
+    text-decoration: none;
+    border: none;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.navBottomItem a {
+    font-size: 15px;
+    font-weight: bold;
+    padding: 4px 8px;
+}
+
+/* Efecto hover en enlaces */
+.navLink:hover,
+.dropbtn:hover {
+    color: rgb(255, 255, 255);
+}
+
+/* Dropdown */
+.dropdownContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.dropdownContent {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: rgb(22, 76, 69);
+    color: rgb(204, 204, 204);
+    min-width: 100%;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 10px;
+}
+
+.dropdownContent a {
+    background-color: rgb(22, 76, 69);
+    color: rgb(204, 204, 204);
+    padding: 12px;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+}
+
+.dropdownContent a:hover {
+    color: rgb(255, 255, 255);
+}
+
+.dropdownContainer:hover .dropdownContent {
+    display: block;
+}
+
+/* Barra de búsqueda */
+.searchBar {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.searchForm {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    background: white;
+    border-radius: 20px;
+    padding: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+}
+
+.searchInput {
+    flex: 1;
+    border: none;
+    padding: 8px;
+    border-radius: 20px;
+    outline: none;
+    font-size: 14px;
+    font-weight: bold;
+    min-width: 200px;
+}
+
+.searchButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Estilo del título en la página de inicio */
+.mainIndexTitle {
+    font-size: 40px;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-style: italic;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    margin-top: 150px;
+}
