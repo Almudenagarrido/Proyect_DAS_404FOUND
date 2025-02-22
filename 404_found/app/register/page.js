@@ -1,12 +1,18 @@
+"use client";
 import React from "react";
-import styles from "@/page.module.css";
+import { useRouter } from "next/navigation";
+import styles from "./page.module.css";
 
 export default function Register() {
-  return (
+    const router = useRouter();
+  
+    const handleReturn = () => {
+      router.push("/login");
+    };
+  
+    return (
     <>
-    <html key="1" lang="es">
-    <body>
-        <main>
+    <main>
         <h2>Introduce tus datos para registrarte en el sistema</h2>
         <form action="">
             <fieldset>
@@ -182,16 +188,13 @@ export default function Register() {
             <input type="submit" value="Registrar" />
             <input type="reset" value="Limpiar" />
             <input
-                defaultValue="Inicio de Sesión"
-                id="return"
-                onclick="window.location.href='Formulario_Login.html';"
                 type="button"
+                value="Inicio de Sesión"
+                onClick={handleReturn}
             />
             </fieldset>
         </form>
-        </main>
-    </body>
-    </html>;
+    </main>
     </>
   );
 }

@@ -4,7 +4,9 @@
     color: rgb(204, 204, 204);
     font-size: 12px;
     padding-left: 16px;
+    padding: 10px;
     text-align: left;
     width: 100%;
     font-family: 'Inter', sans-serif;
+    margin-top: auto;
 }

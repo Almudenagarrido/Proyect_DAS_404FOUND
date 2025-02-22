@@ -9,9 +9,14 @@ export default function Header() {
       <nav className={styles.navContainer}>
         <ul className={styles.navList}>
           <li className={styles.navItem}>
-            <a href="index.html">
-              <img alt="Logo" className={styles.logo} src="/fotos/imagen_capibara.webp" />
-            </a>
+            <Link href={"/"}>
+              <Image src={"/photos/imagen_capibara.webp"}
+              alt="Logo"
+              width={50}
+              height={50}
+              className={styles.logo}
+              priority/>
+            </Link>
           </li>
           <li className={styles.searchBar}>
             <form className={styles.searchForm} action="" method="get">
@@ -25,8 +30,8 @@ export default function Header() {
                 Identifícate <i className="fa fa-caret-down" />
               </button>
               <div className={styles.dropdownContent}>
-                <Link href={"/login/"}>Inicio de sesión</Link>
-                <Link href={"/registro/"}>Registro</Link>
+                <Link href={"/login"}>Inicio de sesión</Link>
+                <Link href={"/register"}>Registro</Link>
               </div>
             </div>
           </li>
@@ -34,23 +39,30 @@ export default function Header() {
       </nav>
       <nav className={styles.navBottom}>
         <ul className={styles.navList}>
-          <li className={styles.navItem}>
-            <a className={styles.navLink} href="">Barra de navegación</a>
-          </li>
           <li>
             <ul className={styles.navList}>
               <li className={styles.navBottomItem}>
-                <a className={styles.navLink} href="Subastas_General.html">Subastas</a>
+                <Link className={styles.navLink} href={"/auctions"}>Subastas</Link>
               </li>
-              <li><a className={styles.navLink} href="">Mis pujas</a></li>
-              <li><a className={styles.navLink} href="">Subastas guardadas</a></li>
-              <li><a className={styles.navLink} href="">Subastas recientes</a></li>
-              <li><a className={styles.navLink} href="">Historial de compras</a></li>
-              <li><a className={styles.navLink} href="">Calendario subastas</a></li>
+              <li>
+                <Link className={styles.navLink} href="">Mis pujas</Link>
+              </li>
+              <li>
+                <Link className={styles.navLink} href={"/"}>Subastas guardadas</Link>
+              </li>
+              <li>
+                <Link className={styles.navLink} href={"/"}>Subastas recientes</Link>
+              </li>
+              <li>
+                <Link className={styles.navLink} href={"/"}>Historial de compras</Link>
+              </li>
+              <li>
+                <Link className={styles.navLink} href={"/"}>Calendario subastas</Link>
+              </li>
             </ul>
           </li>
           <li className={styles.navItem}>
-            <a className={styles.navLink} href="">🛒</a>
+            <Link className={styles.navLink} href={"/"}>🛒</Link>
           </li>
         </ul>
       </nav>

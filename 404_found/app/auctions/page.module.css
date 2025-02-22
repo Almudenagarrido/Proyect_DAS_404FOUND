@@ -1,0 +1,108 @@
+#productsContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.subasta {
+    background-color: rgb(216, 143, 6); 
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+    border: 3px solid rgb(162, 107, 3); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.subasta:hover {
+    transform: scale(1.04);
+}
+
+.subasta-contenido {
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.product-thumbnail {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.subasta h3 {
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 8px;
+    text-decoration: none;
+}
+
+.product-details {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    background-color: rgb(216, 143, 6);
+    border: 3px solid rgb(162, 107, 3); 
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 1000px;
+    width: 90%;
+    margin: 20px auto;
+}
+
+.product-details img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    border-radius: 8px;
+    background-color: white;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.info h2 {
+    font-size: 30px;
+    font-weight: bold;
+    color: rgb(15, 52, 47);
+    margin-bottom: 10px;
+}
+
+.info p {
+    font-size: 16px;
+    margin: 8px 0;
+    font-weight: 400;
+    color: rgb(18, 65, 58);
+}
+
+.info strong {
+    font-size: 18px;
+    color: rgb(15, 52, 47);
+}
+
+.h1 {
+    font-size: 36px;
+    font-weight: bold;
+    color: rgb(15, 52, 47);
+    text-align: center;
+    margin-top: 30px;
+}
