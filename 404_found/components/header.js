@@ -10,7 +10,7 @@ export default function Header() {
         <ul className={styles.navList}>
           <li className={styles.navItem}>
             <Link href={"/"}>
-              <Image src={"/photos/imagen_capibara.webp"}
+              <Image src={"/images/imagen_capibara.webp"}
               alt="Logo"
               width={50}
               height={50}
