@@ -66,7 +66,7 @@
   flex: 1;
   width: 100vw;
   height: 50vh;
-  background-image: url('./photos/foto_index.jpg'); 
+  background-image: url('/images/foto_index.jpg'); 
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import styles from "./page.module.css";
+import styles from "./login.module.css"; // Assuming the CSS file is named login.module.css
 
 export default function LogIn() {
   const router = useRouter();
@@ -21,11 +21,21 @@ export default function LogIn() {
           </legend>
           <br />
           <label htmlFor="user">Usuario: </label>
-          <input id="user" type="text" />
+          <input
+            id="user"
+            type="text"
+            className={`${styles.input}`}
+          />
           <br />
           <br />
           <label htmlFor="password">Contraseña: </label>
-          <input id="password" minLength="8" required type="password" />
+          <input
+            id="password"
+            minLength="8"
+            required
+            type="password"
+            className={`${styles.input}`}
+          />
           <br />
           <br />
           <input type="submit" value="Enviar" />
@@ -34,6 +44,7 @@ export default function LogIn() {
             id="return"
             onClick={handleReturn}
             type="button"
+            className={`${styles.input} ${styles.shake}`}
           />
         </fieldset>
       </form>

@@ -1,200 +1,237 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import styles from "./page.module.css";
+import styles from "./register.module.css";
 
 export default function Register() {
-    const router = useRouter();
-  
-    const handleReturn = () => {
-      router.push("/login");
+  const router = useRouter();
+  const formRef = useRef(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    surname: "",
+    dni: "",
+    mail: "",
+    telephone: "",
+    user: "",
+    birthday: "",
+    direction: "",
+    comunity: "",
+    city: "",
+    payment: "",
+    psw: "",
+    confirmationpsw: "",
+    upimg: null
+  });
+  const [validationErrors, setValidationErrors] = useState({});
+
+  const handleReturn = () => {
+    router.push("/login");
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const validateFields = () => {
+    const errors = {};
+    const requiredFields = ["name", "surname", "dni", "mail", "psw", "confirmationpsw"];
+
+    requiredFields.forEach((field) => {
+      if (!formData[field].trim()) {
+        errors[field] = "This field is required";
+      }
+    });
+
+    if (formData.psw && formData.psw.length < 8) {
+      errors.psw = "Password must be at least 8 characters";
+    }
+
+    if (formData.psw !== formData.confirmationpsw) {
+      errors.confirmationpsw = "Passwords do not match";
+    }
+
+    // Add more custom validations here
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  useEffect(() => {
+    const form = formRef.current;
+    if (!form) return;
+
+    const handleSubmit = (event) => {
+      event.preventDefault();
+
+      if (validateFields()) {
+        console.log("Form data:", formData);
+        // Proceed with form submission
+      }
     };
-  
-    return (
-    <>
+
+    form.addEventListener("submit", handleSubmit);
+
+    return () => {
+      form.removeEventListener("submit", handleSubmit);
+    };
+  }, [formData]);
+
+  return (
     <main>
-        <h2>Introduce tus datos para registrarte en el sistema</h2>
-        <form action="">
-            <fieldset>
-            <legend>
-                Por favor, rellena los siguientes datos para registrarte en elsistema
-            </legend>
-            <br />
-            <label htmlFor="name">Nombre *</label>
-            <br />
-            <input id="name" placeholder="Pepito" type="text" />
-            <br />
-            <br />
-            <label htmlFor="surname">Apellido *</label>
-            <br />
-            <input id="surname" placeholder="Pérez" type="text" />
-            <br />
-            <br />
-            <label htmlFor="dni">DNI *</label>
-            <br />
-            <input id="dni" placeholder="54327401B" type="text" />
-            <br />
-            <br />
-            <label htmlFor="mail">Correo electrónico *</label>
-            <br />
-            <input id="mail" placeholder="usuario@comillas.edu" type="email" />
-            <br />
-            <span className="hide_span" id="spanMail">
-                El correo debe de ser del formato: usuario@dominio.com
-            </span>
-            <br />
-            <label htmlFor="telephone">Número de teléfono</label>
-            <br />
-            <input id="telephone" placeholder="607 54 23 67" type="tel" />
-            <br />
-            <br />
-            <label htmlFor="user">Usuario</label>
-            <br />
-            <input id="user" placeholder="PetitoP" type="text" />
-            <br />
-            <br />
-            <label htmlFor="birthday">Fecha de nacimiento</label>
-            <br />
-            <input id="birthday" type="date" />
-            <br />
-            <span className="hide_span" id="spanBday">
-                Debes ser mayor de edad para participar en la subasta
-            </span>
-            <br />
-            <label htmlFor="direction">Dirección</label>
-            <br />
-            <input
-                id="direction"
-                placeholder="Calle Estrella 12, Madrid"
-                type="text"
-            />
-            <br />
-            <br />
-            <label htmlFor="comunity">Comunidad Autónoma</label>
-            <br />
-            <select id="comunity">
-                <option value="">Selecciona una comunidad</option>
-                <option value="Andalucia">Andalucía</option>
-                <option value="Cataluña">Cataluña</option>
-                <option value="Madrid">Madrid</option>
-                <option value="Valencia">Comunidad Valenciana</option>
-                <option value="Galicia">Galicia</option>
-                <option value="CastillaLaMancha">Castilla-La Mancha</option>
-                <option value="CastillaYLeon">Castilla y León</option>
-                <option value="Catalunya">Cataluña</option>
-                <option value="Extremadura">Extremadura</option>
-                <option value="Madrid">Madrid</option>
-                <option value="Murcia">Murcia</option>
-                <option value="Navarra">Navarra</option>
-                <option value="PaisVasco">País Vasco</option>
-                <option value="Aragon">Aragón</option>
-                <option value="Cantabria">Cantabria</option>
-                <option value="LaRioja">La Rioja</option>
-                <option value="IslasCanarias">Islas Canarias</option>
-                <option value="IslasBaleares">Islas Baleares</option>
-                <option value="Ceuta">Ceuta</option>
-                <option value="Melilla">Melilla</option>
-            </select>
-            <br />
-            <br />
-            <label htmlFor="city">Ciudad</label>
-            <br />
-            <select id="city">
-                <option value="">Selecciona una ciudad</option>
-                <option value="Sevilla">Sevilla</option>
-                <option value="Málaga">Málaga</option>
-                <option value="Granada">Granada</option>
-                <option value="Córdoba">Córdoba</option>
-                <option value="Jaén">Jaén</option>
-                <option value="Huelva">Huelva</option>
-                <option value="Almería">Almería</option>
-                <option value="Linares">Linares</option>
-                <option value="Cádiz">Cádiz</option>
-                <option value="Murcia">Murcia</option>
-                <option value="Cartagena">Cartagena</option>
-                <option value="Alicante">Alicante</option>
-                <option value="Valencia">Valencia</option>
-                <option value="Castellón">Castellón</option>
-                <option value="Zaragoza">Zaragoza</option>
-                <option value="Huesca">Huesca</option>
-                <option value="Teruel">Teruel</option>
-                <option value="Barcelona">Barcelona</option>
-                <option value="Girona">Girona</option>
-                <option value="Lleida">Lleida</option>
-                <option value="Tarragona">Tarragona</option>
-                <option value="Vigo">Vigo</option>
-                <option value="Santiago de Compostela">
-                Santiago de Compostela
-                </option>
-                <option value="A Coruña">A Coruña</option>
-                <option value="Ourense">Ourense</option>
-                <option value="Logroño">Logroño</option>
-                <option value="Palma de Mallorca">Palma de Mallorca</option>
-                <option value="Las Palmas de Gran Canaria">
-                Las Palmas de Gran Canaria
-                </option>
-                <option value="Santa Cruz de Tenerife">
-                Santa Cruz de Tenerife
-                </option>
-                <option value="Bilbao">Bilbao</option>
-                <option value="Vitoria-Gasteiz">Vitoria-Gasteiz</option>
-                <option value="Pamplona">Pamplona</option>
-                <option value="Badajoz">Badajoz</option>
-                <option value="Cáceres">Cáceres</option>
-                <option value="Ávila">Ávila</option>
-                <option value="Segovia">Segovia</option>
-                <option value="Salamanca">Salamanca</option>
-                <option value="Valladolid">Valladolid</option>
-                <option value="León">León</option>
-                <option value="Palencia">Palencia</option>
-                <option value="Burgos">Burgos</option>
-                <option value="Álava">Álava</option>
-                <option value="Guipúzcoa">Guipúzcoa</option>
-                <option value="Vizcaya">Vizcaya</option>
-                <option value="Ceuta">Ceuta</option>
-                <option value="Melilla">Melilla</option>
-            </select>
-            <br />
-            <br />
-            <label htmlFor="payment">Datos de pago</label>
-            <br />
-            <input id="payment" type="text" />
-            <br />
-            <br />
-            <label htmlFor="psw">Contraseña</label>
-            <br />
-            <input id="psw" placeholder="Contraseña" type="password" />
-            <br />
-            <span className="hide_span" id="spanpswl">
-                La contraseña tiene que tener al menos 8 caracteres
-            </span>
-            <br />
-            <label htmlFor="confirmationpsw">Confirma la contraseña</label>
-            <br />
-            <input
-                id="confirmationpsw"
-                placeholder="Confirmar contraseña"
-                type="password"
-            />
-            <br />
-            <span className="hide_span" id="spanpsw">
-                Las contraseñas no coinciden
-            </span>
-            <br />
-            <label htmlFor="upimg">Carga una foto de tú DNI: </label>
-            <input id="upimg" name="filename" type="file" />
-            <br />
-            <br />
-            <input type="submit" value="Registrar" />
-            <input type="reset" value="Limpiar" />
-            <input
-                type="button"
-                value="Inicio de Sesión"
-                onClick={handleReturn}
-            />
-            </fieldset>
-        </form>
+      <h2>Introduce tus datos para registrarte en el sistema</h2>
+      <form ref={formRef}>
+        <fieldset>
+          <legend>Por favor, rellena los siguientes datos para registrarte en el sistema</legend>
+          <br />
+          <label htmlFor="name">Nombre *</label>
+          <br />
+          <input
+            id="name"
+            name="name"
+            className={styles.input}
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Pepito"
+            type="text"
+          />
+          <br />
+          {validationErrors.name && <span className={styles.hide_span}>{validationErrors.name}</span>}
+          <br />
+
+          <label htmlFor="surname">Apellido *</label>
+          <br />
+          <input
+            id="surname"
+            name="surname"
+            className={styles.input}
+            value={formData.surname}
+            onChange={handleChange}
+            placeholder="Pérez"
+            type="text"
+          />
+          <br />
+          {validationErrors.surname && <span className={styles.hide_span}>{validationErrors.surname}</span>}
+          <br />
+
+          <label htmlFor="dni">DNI *</label>
+          <br />
+          <input
+            id="dni"
+            name="dni"
+            className={styles.input}
+            value={formData.dni}
+            onChange={handleChange}
+            placeholder="54327401B"
+            type="text"
+          />
+          <br />
+          {validationErrors.dni && <span className={styles.hide_span}>{validationErrors.dni}</span>}
+          <br />
+
+          <label htmlFor="mail">Correo electrónico *</label>
+          <br />
+          <input
+            id="mail"
+            name="mail"
+            className={styles.input}
+            value={formData.mail}
+            onChange={handleChange}
+            placeholder="usuario@comillas.edu"
+            type="email"
+          />
+          <br />
+          {validationErrors.mail && <span className={styles.hide_span}>{validationErrors.mail}</span>}
+          <br />
+
+          <label htmlFor="telephone">Número de teléfono</label>
+          <br />
+          <input
+            id="telephone"
+            name="telephone"
+            className={styles.input}
+            value={formData.telephone}
+            onChange={handleChange}
+            placeholder="607 54 23 67"
+            type="tel"
+          />
+          <br />
+          <br />
+
+          <label htmlFor="user">Usuario</label>
+          <br />
+          <input
+            id="user"
+            name="user"
+            className={styles.input}
+            value={formData.user}
+            onChange={handleChange}
+            placeholder="PepitoP"
+            type="text"
+          />
+          <br />
+          <br />
+
+          <label htmlFor="birthday">Fecha de nacimiento</label>
+          <br />
+          <input
+            id="birthday"
+            name="birthday"
+            className={styles.input}
+            value={formData.birthday}
+            onChange={handleChange}
+            type="date"
+          />
+          <br />
+          {validationErrors.birthday && <span className={styles.hide_span}>{validationErrors.birthday}</span>}
+          <br />
+
+          <label htmlFor="psw">Contraseña</label>
+          <br />
+          <input
+            id="psw"
+            name="psw"
+            className={styles.input}
+            value={formData.psw}
+            onChange={handleChange}
+            placeholder="Contraseña"
+            type="password"
+          />
+          <br />
+          {validationErrors.psw && <span className={styles.hide_span}>{validationErrors.psw}</span>}
+          <br />
+
+          <label htmlFor="confirmationpsw">Confirma la contraseña</label>
+          <br />
+          <input
+            id="confirmationpsw"
+            name="confirmationpsw"
+            className={styles.input}
+            value={formData.confirmationpsw}
+            onChange={handleChange}
+            placeholder="Confirmar contraseña"
+            type="password"
+          />
+          <br />
+          {validationErrors.confirmationpsw && <span className={styles.hide_span}>{validationErrors.confirmationpsw}</span>}
+          <br />
+
+          <label htmlFor="upimg">Carga una foto de tú DNI: </label>
+          <input
+            id="upimg"
+            name="upimg"
+            className={styles.input}
+            type="file"
+            onChange={handleChange}
+          />
+          <br />
+          <br />
+
+          <input type="submit" value="Registrar" />
+          <input type="reset" value="Limpiar" />
+          <input type="button" value="Inicio de Sesión" onClick={handleReturn} />
+        </fieldset>
+      </form>
     </main>
-    </>
   );
 }
