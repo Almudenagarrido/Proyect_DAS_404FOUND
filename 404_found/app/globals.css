@@ -50,3 +50,19 @@ a {
     color-scheme: dark;
   }
 }
+
+.index {
+  background-image: url('/images/foto_index.jpg'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+}
+
+.indexPhrase {
+  text-align: center;
+  color: white;
+  padding-top: 280px;
+  font-size: 50px;;
+}
