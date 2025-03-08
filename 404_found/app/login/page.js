@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import styles from "./login.module.css"; // Assuming the CSS file is named login.module.css
+import styles from "./login.module.css";
 
 export default function LogIn() {
   const router = useRouter();

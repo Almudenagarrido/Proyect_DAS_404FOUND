@@ -1,26 +1,47 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import styles from "./header.module.css";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
+  const [search, setSearch] = useState("");
+  const router = useRouter();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (search.trim()) {
+      router.push(`/auctions?search=${encodeURIComponent(search.trim())}`);
+    }
+  };
+
   return (
     <header className={styles.headerContainer}>
       <nav className={styles.navContainer}>
         <ul className={styles.navList}>
           <li className={styles.navItem}>
             <Link href={"/"}>
-              <Image src="/images/imagen_capibara.webp"
-              alt="Logo"
-              width={50}
-              height={50}
-              className={styles.logo}
-              priority/>
+              <Image
+                src="/images/imagen_capibara.webp"
+                alt="Logo"
+                width={50}
+                height={50}
+                className={styles.logo}
+                priority
+              />
             </Link>
           </li>
           <li className={styles.searchBar}>
-            <form className={styles.searchForm} action="" method="get">
-              <input className={styles.searchInput} name="search" placeholder="Buscar productos.." type="text" />
+            <form className={styles.searchForm} onSubmit={handleSearch}>
+              <input
+                className={styles.searchInput}
+                name="search"
+                placeholder="Buscar productos.."
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
               <button className={styles.searchButton} type="submit">🔍</button>
             </form>
           </li>
@@ -68,4 +89,4 @@ export default function Header() {
       </nav>
     </header>
   );
-};
+}
