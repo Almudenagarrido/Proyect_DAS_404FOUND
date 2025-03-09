@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./header.module.css";
 import Link from "next/link";
 import Image from "next/image";
@@ -7,13 +7,31 @@ import { useRouter } from "next/navigation";
 
 export default function Header() {
   const [search, setSearch] = useState("");
+  const [username, setUsername] = useState("");  
   const router = useRouter();
 
+  // Search
   const handleSearch = (e) => {
     e.preventDefault();
     if (search.trim()) {
       router.push(`/auctions?search=${encodeURIComponent(search.trim())}`);
     }
+  };
+
+  // Username
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername); 
+    }
+  }, []);
+
+  // Handle Logout (POR AHORA ESTÁ AQUÍ PORQUE NO TENEMOS CLARO CÓMO HAY QUE MANEJAR ESTO TODAVÍA)
+  const handleLogout = () => {
+    localStorage.removeItem("username");
+    localStorage.removeItem("access"); 
+    window.location.reload(); 
+    router.push("/login");
   };
 
   return (
@@ -46,15 +64,27 @@ export default function Header() {
             </form>
           </li>
           <li className={styles.navItem}>
-            <div className={styles.dropdownContainer}>
-              <button className={styles.dropbtn}>
-                Identifícate <i className="fa fa-caret-down" />
-              </button>
-              <div className={styles.dropdownContent}>
-                <Link href={"/login"}>Inicio de sesión</Link>
-                <Link href={"/register"}>Registro</Link>
+            {username ? (
+              <div className={styles.dropdownContainer}>
+                <button className={styles.dropbtn}>
+                  Bienvenido, {username} <i className="fa fa-caret-down" />
+                </button>
+                <div className={styles.dropdownContent}>
+                  <Link href="/user">Mi cuenta</Link>
+                  <button onClick={handleLogout} className={styles.logoutButton}>Cerrar sesión</button>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className={styles.dropdownContainer}>
+                <button className={styles.dropbtn}>
+                  Identifícate <i className="fa fa-caret-down" />
+                </button>
+                <div className={styles.dropdownContent}>
+                  <Link href={"/login"}>Inicio de sesión</Link>
+                  <Link href={"/register"}>Registro</Link>
+                </div>
+              </div>
+            )}
           </li>
         </ul>
       </nav>

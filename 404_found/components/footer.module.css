@@ -5,8 +5,8 @@
     font-size: 12px;
     padding-left: 16px;
     padding: 10px;
-    text-align: left;
+    text-align: center;
     width: 100%;
     font-family: 'Inter', sans-serif;
-    margin-top: auto;
+    margin: 5px; 
 }

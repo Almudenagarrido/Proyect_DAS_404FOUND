@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import styles from "./register.module.css";
 
 export default function Register() {
+  // Define states
   const router = useRouter();
   const formRef = useRef(null);
   const [formData, setFormData] = useState({
@@ -23,215 +24,424 @@ export default function Register() {
     upimg: null
   });
   const [validationErrors, setValidationErrors] = useState({});
+  const [citiesOptions, setCitiesOptions] = useState([]);
 
-  const handleReturn = () => {
+  // Comunities and Cities
+  const comunitiesCities = {
+    "Andalucia": ["Sevilla", "Málaga", "Granada", "Córdoba", "Jaén", "Huelva", "Almería", "Linares", "Cádiz"],
+    "Aragon": ["Zaragoza", "Huesca", "Teruel"],
+    "Cataluña": ["Barcelona", "Girona", "Lleida", "Tarragona"],
+    "Madrid": ["Madrid"],
+    "Valencia": ["Alicante", "Valencia", "Castellón"],
+    "Galicia": ["Vigo", "Santiago de Compostela", "A Coruña", "Ourense"],
+    "CastillaLaMancha": [],
+    "CastillaYLeon": ["Ávila", "Segovia", "Salamanca", "Valladolid", "León", "Palencia", "Burgos"],
+    "Extremadura": ["Badajoz", "Cáceres"],
+    "Murcia": ["Murcia", "Cartagena"],
+    "Navarra": ["Pamplona"],
+    "PaisVasco": ["Bilbao", "Vitoria-Gasteiz", "San Sebastián"],
+    "Cantabria": [],
+    "La Rioja": ["Logroño"],
+    "Islas Canarias": ["Las Palmas de Gran Canaria", "Santa Cruz de Tenerife"],
+    "Islas Baleares": ["Palma de Mallorca"],
+    "Ceuta": ["Ceuta"],
+    "Melilla": ["Melilla"]
+  };
+
+  // Go to LogIn page
+  const handleReturnLogin = () => {
     router.push("/login");
   };
 
+  // Change the data when it is put into the input
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    setFormData((prevState) => {
+      if (name === "comunity") {
+        const selectedCityOptions = comunitiesCities[value] || [];
+        setCitiesOptions(selectedCityOptions);  
+        return { ...prevState, [name]: value, city: "" };  
+      }
+      return { ...prevState, [name]: value };  
+    });
+
+    // Validar el campo al cambiarlo
+    validateField(name, value);
   };
 
+  // Reset fields
+  const handleReset = () => {
+    setFormData({
+      name: "",
+      surname: "",
+      dni: "",
+      mail: "",
+      telephone: "",
+      user: "",
+      birthday: "",
+      direction: "",
+      comunity: "",
+      city: "",
+      payment: "",
+      psw: "",
+      confirmationpsw: "",
+      upimg: null
+    });
+    setValidationErrors({});
+  };
+
+  // Validate a single field
+  const validateField = (fieldName, fieldValue) => {
+    const errors = { ...validationErrors };
+
+    const requiredFields = ["name", "surname", "dni", "mail", "psw", "confirmationpsw"];
+    // Validar solo el campo pasado como argumento
+    if (requiredFields.includes(fieldName)) {
+      if (!fieldValue.trim()) {
+        errors[fieldName] = "Este campo es obligatorio";
+      } else {
+        delete errors[fieldName]; // Eliminar el error si el campo tiene valor
+      }
+    }
+
+    // Validar el nombre y apellido
+    if (fieldName === "name" || fieldName === "surname") {
+      const namePattern = /^[a-zA-Z]+$/;
+      if (fieldValue && !namePattern.test(fieldValue.trim())) {
+        errors[fieldName] = `${fieldName === 'name' ? 'El nombre' : 'El apellido'} solo puede contener letras`;
+      } else {
+        delete errors[fieldName];
+      }
+    }
+
+    // Validar DNI
+    if (fieldName === "dni") {
+      const dniPattern = /^([0-9]{8})([A-Z]{1})$/;
+      if (fieldValue && !dniPattern.test(fieldValue.trim())) {
+        errors.dni = "El DNI no es válido";
+      } else {
+        delete errors.dni;
+      }
+    }
+
+    // Validar correo electrónico
+    if (fieldName === "mail") {
+      const mailPattern = /^[a-zA-Z0-9._%+-]+@comillas.edu$/;
+      if (fieldValue && !mailPattern.test(fieldValue.trim())) {
+        errors.mail = "El correo electrónico debe ser de la forma 'usuario@comillas.edu'";
+      } else {
+        delete errors.mail;
+      }
+    }
+
+    // Validar la contraseña
+    if (fieldName === "psw") {
+      if (fieldValue && fieldValue.length < 8) {
+        errors.psw = "La contraseña debe tener al menos 8 caracteres";
+      } else {
+        delete errors.psw;
+      }
+    }
+
+    // Validar la confirmación de la contraseña
+    if (fieldName === "confirmationpsw") {
+      if (fieldValue && fieldValue !== formData.psw) {
+        errors.confirmationpsw = "Las contraseñas no coinciden";
+      } else {
+        delete errors.confirmationpsw;
+      }
+    }
+
+    // Actualizar el estado con los errores
+    setValidationErrors(errors);
+  };
+
+  // Validate all fields on submit
   const validateFields = () => {
     const errors = {};
     const requiredFields = ["name", "surname", "dni", "mail", "psw", "confirmationpsw"];
 
     requiredFields.forEach((field) => {
       if (!formData[field].trim()) {
-        errors[field] = "This field is required";
+        errors[field] = "Este campo es obligatorio";
       }
     });
 
+    // Validate name and surname
+    const namePattern = /^[a-zA-Z]+$/;
+    if (formData.name && !namePattern.test(formData.name.trim())) {
+      errors.name = "El nombre solo puede contener letras";
+    }
+    if (formData.surname && !namePattern.test(formData.surname.trim())) {
+      errors.surname = "El apellido solo puede contener letras";
+    }
+
+    // Validate DNI
+    const dniPattern = /^([0-9]{8})([A-Z]{1})$/;
+    if (formData.dni && !dniPattern.test(formData.dni.trim())) {
+      errors.dni = "El DNI no es válido";
+    }
+
+    // Validate email
+    const mailPattern = /^[a-zA-Z0-9._%+-]+@comillas.edu$/;
+    if (formData.mail && !mailPattern.test(formData.mail.trim())) {
+      errors.mail = "El correo electrónico debe ser de la forma 'usuario@comillas.edu'";
+    }
+
+    // Validate password
     if (formData.psw && formData.psw.length < 8) {
-      errors.psw = "Password must be at least 8 characters";
+      errors.psw = "La contraseña debe tener al menos 8 caracteres";
     }
 
+    // Validate confirmation password
     if (formData.psw !== formData.confirmationpsw) {
-      errors.confirmationpsw = "Passwords do not match";
+      errors.confirmationpsw = "Las contraseñas no coinciden";
     }
 
-    // Add more custom validations here
+    // Validate birthday
+    if (formData.birthday) {
+      const date = new Date(formData.birthday);
+      const today = new Date();
+      const age = today.getFullYear() - date.getFullYear();
+      const monthDifference = today.getMonth() - date.getMonth();
+      const dayDifference = today.getDate() - date.getDate();
+      if (age < 18 || (age === 18 && (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)))) {
+        errors.birthday = "Debes ser mayor de 18 años";
+      }
+    }
 
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
-  useEffect(() => {
-    const form = formRef.current;
-    if (!form) return;
-
-    const handleSubmit = (event) => {
-      event.preventDefault();
-
-      if (validateFields()) {
-        console.log("Form data:", formData);
-        // Proceed with form submission
+  // Register with POST
+  const register = async (formData) => {
+    try {
+      const postData = {
+        username: formData.user,
+        email: formData.mail,
+        password: formData.psw,
+        first_name: formData.name,
+        last_name: formData.surname,
+        birth_date: formData.birthday,
+        locality: formData.comunity,
+        municipality: formData.city
       }
-    };
+      console.log("postData");
+      console.log(postData);
 
-    form.addEventListener("submit", handleSubmit);
+      const response = await fetch("https://das-p2-backend.onrender.com/api/users/register/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify(postData)
+      });
 
-    return () => {
-      form.removeEventListener("submit", handleSubmit);
-    };
-  }, [formData]);
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Usuario registrado:", data);
+        router.push("/login");
+      } else {
+        console.log("Error en el registro:", data);
+        setValidationErrors({ apiError: data.error || "Error en el servidor"});
+      }
+    } catch (error) {
+      console.log("Error de conexión:", error);
+      setValidationErrors({ apiError: "Hubo un problema al intentar conectar con el servidor." });
+    }
+  };
+
+  // Submit form
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (validateFields()) {
+      console.log("Form data:", formData);
+      await register(formData);
+    }
+  };
 
   return (
-    <main>
-      <h2>Introduce tus datos para registrarte en el sistema</h2>
-      <form ref={formRef}>
-        <fieldset>
-          <legend>Por favor, rellena los siguientes datos para registrarte en el sistema</legend>
-          <br />
-          <label htmlFor="name">Nombre *</label>
-          <br />
-          <input
-            id="name"
-            name="name"
-            className={styles.input}
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Pepito"
-            type="text"
-          />
-          <br />
-          {validationErrors.name && <span className={styles.hide_span}>{validationErrors.name}</span>}
-          <br />
+    <main className={`${styles.mainContainer}`}>
+      <section className={`${styles.container}`}>
+        <h2 className={`${styles.h2}`}>Registro</h2>
+        <form ref={formRef} onSubmit={handleSubmit}>
+          <fieldset className={`${styles.fieldset}`}>
+            <p className={`${styles.legend}`}>
+              Por favor, rellena los siguientes datos para registrarte en el sistema
+            </p>
 
-          <label htmlFor="surname">Apellido *</label>
-          <br />
-          <input
-            id="surname"
-            name="surname"
-            className={styles.input}
-            value={formData.surname}
-            onChange={handleChange}
-            placeholder="Pérez"
-            type="text"
-          />
-          <br />
-          {validationErrors.surname && <span className={styles.hide_span}>{validationErrors.surname}</span>}
-          <br />
+            <label className={`${styles.label}`} htmlFor="name">Nombre *</label>
+            {validationErrors.name && <span className={styles.hide_span}>{validationErrors.name}</span>}
+            <input
+              id="name"
+              name="name"
+              className={styles.input}
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Pepito"
+              type="text"
+            />
 
-          <label htmlFor="dni">DNI *</label>
-          <br />
-          <input
-            id="dni"
-            name="dni"
-            className={styles.input}
-            value={formData.dni}
-            onChange={handleChange}
-            placeholder="54327401B"
-            type="text"
-          />
-          <br />
-          {validationErrors.dni && <span className={styles.hide_span}>{validationErrors.dni}</span>}
-          <br />
+            <label className={`${styles.label}`} htmlFor="surname">Apellido *</label>
+            {validationErrors.surname && <span className={styles.hide_span}>{validationErrors.surname}</span>}
 
-          <label htmlFor="mail">Correo electrónico *</label>
-          <br />
-          <input
-            id="mail"
-            name="mail"
-            className={styles.input}
-            value={formData.mail}
-            onChange={handleChange}
-            placeholder="usuario@comillas.edu"
-            type="email"
-          />
-          <br />
-          {validationErrors.mail && <span className={styles.hide_span}>{validationErrors.mail}</span>}
-          <br />
+            <input
+              id="surname"
+              name="surname"
+              className={styles.input}
+              value={formData.surname}
+              onChange={handleChange}
+              placeholder="Pérez"
+              type="text"
+            />
 
-          <label htmlFor="telephone">Número de teléfono</label>
-          <br />
-          <input
-            id="telephone"
-            name="telephone"
-            className={styles.input}
-            value={formData.telephone}
-            onChange={handleChange}
-            placeholder="607 54 23 67"
-            type="tel"
-          />
-          <br />
-          <br />
+            <label className={`${styles.label}`} htmlFor="dni">DNI *</label>
+            {validationErrors.dni && <span className={styles.hide_span}>{validationErrors.dni}</span>}
+            <input
+              id="dni"
+              name="dni"
+              className={styles.input}
+              value={formData.dni}
+              onChange={handleChange}
+              placeholder="12345678A"
+              type="text"
+            />
 
-          <label htmlFor="user">Usuario</label>
-          <br />
-          <input
-            id="user"
-            name="user"
-            className={styles.input}
-            value={formData.user}
-            onChange={handleChange}
-            placeholder="PepitoP"
-            type="text"
-          />
-          <br />
-          <br />
+            <label className={`${styles.label}`} htmlFor="mail">Correo electrónico (Comillas) *</label>
+            {validationErrors.mail && <span className={styles.hide_span}>{validationErrors.mail}</span>}
+            <input
+              id="mail"
+              name="mail"
+              className={styles.input}
+              value={formData.mail}
+              onChange={handleChange}
+              placeholder="pepito@comillas.edu"
+              type="email"
+            />
 
-          <label htmlFor="birthday">Fecha de nacimiento</label>
-          <br />
-          <input
-            id="birthday"
-            name="birthday"
-            className={styles.input}
-            value={formData.birthday}
-            onChange={handleChange}
-            type="date"
-          />
-          <br />
-          {validationErrors.birthday && <span className={styles.hide_span}>{validationErrors.birthday}</span>}
-          <br />
+            <label className={`${styles.label}`} htmlFor="telephone">Teléfono</label>
+            <input
+              id="telephone"
+              name="telephone"
+              className={styles.input}
+              value={formData.telephone}
+              onChange={handleChange}
+              placeholder="617861234"
+              type="text"
+            />
 
-          <label htmlFor="psw">Contraseña</label>
-          <br />
-          <input
-            id="psw"
-            name="psw"
-            className={styles.input}
-            value={formData.psw}
-            onChange={handleChange}
-            placeholder="Contraseña"
-            type="password"
-          />
-          <br />
-          {validationErrors.psw && <span className={styles.hide_span}>{validationErrors.psw}</span>}
-          <br />
+            <label className={`${styles.label}`} htmlFor="user">Nombre de usuario *</label>
+            {validationErrors.user && <span className={styles.hide_span}>{validationErrors.user}</span>}
+            <input
+              id="user"
+              name="user"
+              className={styles.input}
+              value={formData.user}
+              onChange={handleChange}
+              placeholder="pepito123"
+              type="text"
+            />
 
-          <label htmlFor="confirmationpsw">Confirma la contraseña</label>
-          <br />
-          <input
-            id="confirmationpsw"
-            name="confirmationpsw"
-            className={styles.input}
-            value={formData.confirmationpsw}
-            onChange={handleChange}
-            placeholder="Confirmar contraseña"
-            type="password"
-          />
-          <br />
-          {validationErrors.confirmationpsw && <span className={styles.hide_span}>{validationErrors.confirmationpsw}</span>}
-          <br />
+            <label className={`${styles.label}`} htmlFor="birthday">Fecha de nacimiento *</label>
+            {validationErrors.birthday && <span className={styles.hide_span}>{validationErrors.birthday}</span>}
+            <input
+              id="birthday"
+              name="birthday"
+              className={styles.input}
+              value={formData.birthday}
+              onChange={handleChange}
+              placeholder="dd/mm/yyyy"
+              type="date"
+            />
 
-          <label htmlFor="upimg">Carga una foto de tú DNI: </label>
-          <input
-            id="upimg"
-            name="upimg"
-            className={styles.input}
-            type="file"
-            onChange={handleChange}
-          />
-          <br />
-          <br />
+            <label className={`${styles.label}`} htmlFor="comunity">Comunidad Autónoma *</label>
+            <select
+              id="comunity"
+              name="comunity"
+              className={styles.input}
+              value={formData.comunity}
+              onChange={handleChange}
+            >
+              <option value="">Selecciona una opción</option>
+              {Object.keys(comunitiesCities).map((comunity, index) => (
+                <option key={index} value={comunity}>{comunity}</option>
+              ))}
+            </select>
 
-          <input type="submit" value="Registrar" />
-          <input type="reset" value="Limpiar" />
-          <input type="button" value="Inicio de Sesión" onClick={handleReturn} />
-        </fieldset>
-      </form>
+            <label className={`${styles.label}`} htmlFor="city">Ciudad *</label>
+            <select
+              id="city"
+              name="city"
+              className={styles.input}
+              value={formData.city}
+              onChange={handleChange}
+              disabled={!formData.comunity}
+            >
+              <option value="">Selecciona una opción</option>
+              {citiesOptions.map((city, index) => (
+                <option key={index} value={city}>{city}</option>
+              ))}
+            </select>
+
+            <label className={`${styles.label}`} htmlFor="payment">Método de pago</label>
+            <select
+              id="payment"
+              name="payment"
+              className={styles.input}
+              value={formData.payment}
+              onChange={handleChange}
+            >
+              <option value="">Selecciona una opción</option>
+              <option value="tarjeta">Tarjeta</option>
+              <option value="paypal">PayPal</option>
+            </select>
+
+            <label className={`${styles.label}`} htmlFor="psw">Contraseña *</label>
+            {validationErrors.psw && <span className={styles.hide_span}>{validationErrors.psw}</span>}
+            <input
+              id="psw"
+              name="psw"
+              className={styles.input}
+              value={formData.psw}
+              onChange={handleChange}
+              placeholder="Contraseña"
+              type="password"
+            />
+
+            <label className={`${styles.label}`} htmlFor="confirmationpsw">Confirmar contraseña *</label>
+            {validationErrors.confirmationpsw && <span className={styles.hide_span}>{validationErrors.confirmationpsw}</span>}
+            <input
+              id="confirmationpsw"
+              name="confirmationpsw"
+              className={styles.input}
+              value={formData.confirmationpsw}
+              onChange={handleChange}
+              placeholder="Confirmar contraseña"
+              type="password"
+            />
+
+            <label className={`${styles.label}`} htmlFor="upimg">Carga una foto de tu DNI: </label>
+            <input
+              id="upimg"
+              name="upimg"
+              className={styles.input}
+              type="file"
+              onChange={handleChange}
+            />
+            {validationErrors.apiError && <div className={styles.hide_span}>{validationErrors.apiError}</div>}
+
+            <div className={styles.buttonsContainer}>
+              <button className={styles.button} type="submit">Registrarse</button>
+              <button className={styles.button} type="button" onClick={handleReset}>Limpiar</button>
+              <button className={styles.button} type="button" onClick={handleReturnLogin}>Ir a Inicio Sesión</button>
+            </div>
+          </fieldset>
+        </form>
+      </section>
     </main>
   );
 }

@@ -3,20 +3,23 @@
     color: rgb(204, 204, 204);
     padding: 20px;
     text-align: center;
+    margin: 5px; 
 }
 
 .navContainer {
+    margin: 0;
     display: flex;
     align-items: center;
     background-color: rgb(22, 76, 69);
     color: rgb(204, 204, 204);
     width: 100%;
-    padding: 10px 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .navBottom {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     text-align: center;
 }
 
@@ -25,10 +28,12 @@
     display: flex;
     flex-wrap: wrap;
     text-align: center;
-    justify-content: space-between;
     width: 100%;
-    padding: 0;
-    margin: 0;
+    justify-content: center;  
+    padding: 0px;
+    margin: 0px;
+    gap: 15px; 
+    align-items: center;
 }
 
 .navItem {
@@ -135,4 +140,21 @@
     text-align: center;
     color: rgb(255, 255, 255);
     margin-top: 150px;
+}
+
+
+/* QUITAR LUEGO SI QUITAMOS EL BOTÓN DE LOGOUT: */
+.logoutButton {
+    padding: 12px;
+    text-align: center;
+    font: bold 13px 'Inter', sans-serif;
+    color: rgb(204, 204, 204);
+    display: center;
+    background: rgb(22, 76, 69);
+    border-color:rgb(22, 76, 69);
+    box-shadow: none;
+}
+
+.logoutButton:hover {
+    color: rgb(255, 255, 255);
 }
