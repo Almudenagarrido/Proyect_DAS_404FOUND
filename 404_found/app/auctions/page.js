@@ -1,7 +1,7 @@
 "use client";
-import React, { useEffect, useState, Suspense } from "react";  // Agrega Suspense
-import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import styles from "./auctions.module.css";
 
 export default function Auction() {
@@ -47,8 +47,8 @@ export default function Auction() {
   };
 
   return (
-    <main className={styles.auctionPage}>
-      <Suspense fallback={<div>Loading auctions...</div>}> {/* Suspense boundary */}
+    <Suspense fallback={<div>Loading...</div>}>
+      <main className={styles.auctionPage}>
         <aside className={styles.sidebar}>
           <label>Rango de Precios:</label>
           <div className={styles.priceRange}>
@@ -112,7 +112,7 @@ export default function Auction() {
             </p>
           )}
         </section>
-      </Suspense>
-    </main>
+      </main>
+    </Suspense>
   );
 }
