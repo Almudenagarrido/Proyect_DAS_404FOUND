@@ -1,7 +1,7 @@
 "use client";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";  // Agrega Suspense
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import styles from "./auctions.module.css";
 
 export default function Auction() {
@@ -48,69 +48,71 @@ export default function Auction() {
 
   return (
     <main className={styles.auctionPage}>
-      <aside className={styles.sidebar}>
-        <label>Rango de Precios:</label>
-        <div className={styles.priceRange}>
-          <span>{minPrice}€</span>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={minPrice}
-            onChange={(e) => setMinPrice(Number(e.target.value))}
-          />
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(Number(e.target.value))}
-          />
-          <span>{maxPrice}€</span>
-        </div>
+      <Suspense fallback={<div>Loading auctions...</div>}> {/* Suspense boundary */}
+        <aside className={styles.sidebar}>
+          <label>Rango de Precios:</label>
+          <div className={styles.priceRange}>
+            <span>{minPrice}€</span>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={minPrice}
+              onChange={(e) => setMinPrice(Number(e.target.value))}
+            />
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(Number(e.target.value))}
+            />
+            <span>{maxPrice}€</span>
+          </div>
 
-        <label>Categorías:</label>
-        <div className={styles.categories}>
-          {["beauty", "fragrances", "groceries", "home", "toys", "sports", "automotive", "books", "health", "food"].map(
-            (category) => (
-              <div key={category}>
-                <input
-                  type="checkbox"
-                  id={category}
-                  checked={selectedCategories.includes(category)}
-                  onChange={() => handleCategoryChange(category)}
-                />
-                <label htmlFor={category}>{category}</label>
+          <label>Categorías:</label>
+          <div className={styles.categories}>
+            {["beauty", "fragrances", "groceries", "home", "toys", "sports", "automotive", "books", "health", "food"].map(
+              (category) => (
+                <div key={category}>
+                  <input
+                    type="checkbox"
+                    id={category}
+                    checked={selectedCategories.includes(category)}
+                    onChange={() => handleCategoryChange(category)}
+                  />
+                  <label htmlFor={category}>{category}</label>
+                </div>
+              )
+            )}
+          </div>
+        </aside>
+
+        <section className={styles.productsContainer}>
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product) => (
+              <div key={product.id} className={styles.subasta}>
+                <div className={styles.subastaContenido}>
+                  <Link href={`/details/${product.id}`}>
+                    <div className={styles.imageWrapper}>
+                      <img
+                        src={product.thumbnail}
+                        alt={product.title}
+                        className={styles.productThumbnail}
+                      />
+                    </div>
+                    <h3 className={styles.subastaTitle}>{product.title}</h3>
+                  </Link>
+                </div>
               </div>
-            )
+            ))
+          ) : (
+            <p className={styles.noSubastas}>
+              {searchQuery ? "No se encontraron subastas con ese término." : "Cargando subastas..."}
+            </p>
           )}
-        </div>
-      </aside>
-
-      <section className={styles.productsContainer}>
-        {filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => (
-            <div key={product.id} className={styles.subasta}>
-              <div className={styles.subastaContenido}>
-                <Link href={`/details/${product.id}`}>
-                  <div className={styles.imageWrapper}>
-                    <img
-                      src={product.thumbnail}
-                      alt={product.title}
-                      className={styles.productThumbnail}
-                    />
-                  </div>
-                  <h3 className={styles.subastaTitle}>{product.title}</h3>
-                </Link>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p className={styles.noSubastas}>
-            {searchQuery ? "No se encontraron subastas con ese término." : "Cargando subastas..."}
-          </p>
-        )}
-      </section>
+        </section>
+      </Suspense>
     </main>
   );
 }
