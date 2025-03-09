@@ -96,16 +96,15 @@ export default function Register() {
     const errors = { ...validationErrors };
 
     const requiredFields = ["name", "surname", "dni", "mail", "psw", "confirmationpsw"];
-    // Validar solo el campo pasado como argumento
     if (requiredFields.includes(fieldName)) {
       if (!fieldValue.trim()) {
         errors[fieldName] = "Este campo es obligatorio";
       } else {
-        delete errors[fieldName]; // Eliminar el error si el campo tiene valor
+        delete errors[fieldName]; 
       }
     }
 
-    // Validar el nombre y apellido
+    // Name
     if (fieldName === "name" || fieldName === "surname") {
       const namePattern = /^[a-zA-Z]+$/;
       if (fieldValue && !namePattern.test(fieldValue.trim())) {
@@ -115,7 +114,7 @@ export default function Register() {
       }
     }
 
-    // Validar DNI
+    // DNI
     if (fieldName === "dni") {
       const dniPattern = /^([0-9]{8})([A-Z]{1})$/;
       if (fieldValue && !dniPattern.test(fieldValue.trim())) {
@@ -125,7 +124,7 @@ export default function Register() {
       }
     }
 
-    // Validar correo electrónico
+    // Mail
     if (fieldName === "mail") {
       const mailPattern = /^[a-zA-Z0-9._%+-]+@comillas.edu$/;
       if (fieldValue && !mailPattern.test(fieldValue.trim())) {
@@ -135,7 +134,7 @@ export default function Register() {
       }
     }
 
-    // Validar la contraseña
+    // Pwd
     if (fieldName === "psw") {
       if (fieldValue && fieldValue.length < 8) {
         errors.psw = "La contraseña debe tener al menos 8 caracteres";
@@ -144,7 +143,7 @@ export default function Register() {
       }
     }
 
-    // Validar la confirmación de la contraseña
+    // Confimation psw
     if (fieldName === "confirmationpsw") {
       if (fieldValue && fieldValue !== formData.psw) {
         errors.confirmationpsw = "Las contraseñas no coinciden";
@@ -153,7 +152,7 @@ export default function Register() {
       }
     }
 
-    // Actualizar el estado con los errores
+    // Update state
     setValidationErrors(errors);
   };
 
