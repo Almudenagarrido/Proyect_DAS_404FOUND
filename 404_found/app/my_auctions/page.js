@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import styles from "./my_auctions.module.css";
+import { useRouter } from "next/navigation";
 
 export default function Auction() {
   const [products, setProducts] = useState([]);
@@ -13,6 +14,7 @@ export default function Auction() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
+  const router = useRouter();
 
   useEffect(() => {
     fetch("https://dummyjson.com/products")
@@ -47,8 +49,15 @@ export default function Auction() {
     );
   };
 
+  function auctionRegister() {
+    router.push("/create_auction")
+  }
+
   return (
     <main className={styles.auctionPage}>
+      <section className={styles.buttonContainer}>
+        <button className={styles.createButton} onClick={auctionRegister}>Crear subasta</button>
+      </section>
       <section className={styles.productsContainer}>
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
@@ -65,7 +74,6 @@ export default function Auction() {
                   <h3 className={styles.subastaTitle}>{product.title}</h3>
                   <section className={styles.buttonContainer}>
                     <button className={styles.editButton}>
-                        {/* TODO: cambiar estilos */}
                         <Image
                             src="/images/pencil.webp"
                             alt="Logo"

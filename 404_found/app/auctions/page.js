@@ -51,7 +51,7 @@ export default function Auction() {
       <aside className={styles.sidebar}>
         <label>Rango de Precios:</label>
         <div className={styles.priceRange}>
-          <span>{minPrice}€</span>
+          <span>Min: {minPrice} €</span>
           <input
             type="range"
             min="0"
@@ -66,7 +66,7 @@ export default function Auction() {
             value={maxPrice}
             onChange={(e) => setMaxPrice(Number(e.target.value))}
           />
-          <span>{maxPrice}€</span>
+          <span>Max: {maxPrice} €</span>
         </div>
 
         <label>Categorías:</label>
@@ -101,6 +101,7 @@ export default function Auction() {
                     />
                   </div>
                   <h3 className={styles.subastaTitle}>{product.title}</h3>
+                  <h4 className={styles.subastaPrice}>{product.price} €</h4>
                 </Link>
               </div>
             </div>

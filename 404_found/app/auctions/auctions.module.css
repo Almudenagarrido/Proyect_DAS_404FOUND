@@ -110,6 +110,14 @@
   text-decoration: none;
 }
 
+.subastaPrice {
+  color: black;
+  font-size: 14px;
+  font-weight: normal;
+  margin-top: 8px;
+  text-decoration: none;
+}
+
 .noSubastas {
   text-align: left;
   font-size: 18px;
