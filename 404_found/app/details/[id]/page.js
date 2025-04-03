@@ -9,7 +9,7 @@ export default function ProductDetails() {
 
   useEffect(() => {
     if (id) {
-      fetch(`https://dummyjson.com/products/${id}`)
+      fetch("http://127.0.0.1:8000/api/auctions/${id}/")
         .then((response) => response.json())
         .then((data) => setProduct(data))
         .catch((error) => console.error("Error al cargar detalles:", error));

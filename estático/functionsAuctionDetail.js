@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('id');
 
-    fetch(`https://dummyjson.com/products/${productId}`)
+    fetch("http://127.0.0.1:8000/api/auctions/${productId}/")
         .then(response => response.json())
         .then(product => {
             const productDetails = document.getElementById("productDetails");

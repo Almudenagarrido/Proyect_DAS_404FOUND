@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     const subastasContainer = document.getElementById("productsContainer");
 
-    fetch("https://dummyjson.com/products")
+    fetch("http://127.0.0.1:8000/api/auctions/")
         .then(response => response.json())
         .then(data => {
             subastasContainer.innerHTML = "";

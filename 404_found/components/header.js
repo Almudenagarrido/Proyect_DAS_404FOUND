@@ -41,7 +41,7 @@ export default function Header() {
           <li className={styles.navItem}>
             <Link href={"/"}>
               <Image
-                src="/images/imagen_capibara.webp"
+                src="/images/perry_the_platapus.png"
                 alt="Logo"
                 width={50}
                 height={50}
