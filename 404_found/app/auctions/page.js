@@ -14,12 +14,12 @@ export default function Auction() {
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
 
   useEffect(() => {
-    // Cambiar la URL a tu API backend
-    fetch("http://127.0.0.1:8000/api/auctions/")
+    fetch("http://localhost:8000/api/auctions/", 
+      {method: "GET",})
       .then((response) => response.json())
       .then((data) => {
-        setProducts(data);
-        setFilteredProducts(data);
+        setProducts(data.results);
+        setFilteredProducts(data.results);
       })
       .catch((error) => console.error("Error al cargar las subastas:", error));
   }, []);

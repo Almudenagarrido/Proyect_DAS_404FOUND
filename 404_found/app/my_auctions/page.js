@@ -17,7 +17,8 @@ export default function Auction() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/auctions/")
+    fetch("http://localhost:8000/api/auctions/", 
+      {method: "GET",})
       .then((response) => response.json())
       .then((data) => {
         setProducts(data.products);

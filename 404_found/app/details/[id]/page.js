@@ -9,7 +9,8 @@ export default function ProductDetails() {
 
   useEffect(() => {
     if (id) {
-      fetch("http://127.0.0.1:8000/api/auctions/${id}/")
+      fetch("http://localhost:8000/api/auctions/${id}/", 
+        {method: "GET",})
         .then((response) => response.json())
         .then((data) => setProduct(data))
         .catch((error) => console.error("Error al cargar detalles:", error));
