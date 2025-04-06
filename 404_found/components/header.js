@@ -96,7 +96,7 @@ export default function Header() {
                 <Link className={styles.navLink} href={"/auctions"}>Subastas</Link>
               </li>
               <li>
-                {username ? (<Link className={styles.navLink} href="/">Mis pujas</Link>): ""}
+                {username ? (<Link className={styles.navLink} href="/my_bids">Mis pujas</Link>): ""}
               </li>
               <li>
                 {username ? (<Link className={styles.navLink} href="/my_auctions">Mis subastas</Link>): ""}

@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import styles from "./create_auction.module.css";
+import { useRouter, useParams } from "next/navigation";
+import styles from "./edit_auction.module.css";
 
-export default function CreateAuction() {
+export default function EditAuction() {
+  const { id } = useParams();
   const router = useRouter();
-  const data = ["name", "description", "price", "rating", "stock", "brand", "photo_link", "category", "closing_date"];
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -14,26 +14,45 @@ export default function CreateAuction() {
     stock: "",
     brand: "",
     photo_link: "",
-    category: "",
+    category: "", 
     closing_date: "",
   });
   const [validationErrors, setValidationErrors] = useState([]);
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-      fetch("http://127.0.0.1:8000/api/auctions/categories/")  
-        .then((response) => {
-          return response.json(); 
-        })
+    fetch("http://127.0.0.1:8000/api/auctions/categories/")
+      .then((response) => response.json())
+      .then((data) => {
+        setCategories(data.results); 
+      })
+      .catch((error) => {
+        console.error("Error al cargar las categorías:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (id) {
+      fetch(`http://127.0.0.1:8000/api/auctions/${id}/`)
+        .then((response) => response.json())
         .then((data) => {
-          const categories = data.results; 
-          console.log("Categorías recibidas:", categories);
-          setCategories(categories);
+          setFormData({
+            name: data.title,
+            description: data.description,
+            price: data.price,
+            rating: data.rating,
+            stock: data.stock,
+            brand: data.brand,
+            photo_link: data.thumbnail,
+            category: data.category, 
+            closing_date: data.closing_date,
+          });
         })
         .catch((error) => {
-          console.error("Error al cargar las categorías:", error); 
+          console.error("Error al cargar los datos de la subasta:", error);
         });
-    }, []);
+    }
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,7 +73,7 @@ export default function CreateAuction() {
       errors.price = "El precio debe ser un número válido";
     }
 
-    if (fieldName === "rating" && isNaN(fieldValue)) {
+    if (fieldName === "rating" && (fieldValue < 0 || fieldValue > 5)) {
       errors.rating = "La puntuación debe estar entre 0 y 5";
     }
 
@@ -65,80 +84,61 @@ export default function CreateAuction() {
     const errors = {};
 
     Object.keys(formData).forEach((field) => {
-        const fieldValue = formData[field];
+      const fieldValue = formData[field];
 
-        if (typeof fieldValue === "string" && !fieldValue.trim()) {
-            errors[field] = "Este campo es obligatorio";
-        }
-        else if (field === "price" && isNaN(Number(fieldValue))) {
-            errors.price = "El precio debe ser un número válido";
-        }
-        else if (field === "rating" && (fieldValue < 0 || fieldValue > 5)) {
-            errors.rating = "La puntuación debe estar entre 0 y 5";
-        }
+      if (typeof fieldValue === "string" && !fieldValue.trim()) {
+        errors[field] = "Este campo es obligatorio";
+      } else if (field === "price" && isNaN(Number(fieldValue))) {
+        errors.price = "El precio debe ser un número válido";
+      } else if (field === "rating" && (fieldValue < 0 || fieldValue > 5)) {
+        errors.rating = "La puntuación debe estar entre 0 y 5";
+      }
     });
 
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateFields()) {
-      console.log("Auction Data:", formData);
-      const response = await fetch("http://127.0.0.1:8000/api/auctions/", {
-        method: "POST",
+      console.log("Datos de la subasta editados:", formData);
+      const response = await fetch(`http://127.0.0.1:8000/api/auctions/${id}/`, {
+        method: "PUT",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          title: formData.name,  
+          title: formData.name,
           price: parseFloat(formData.price),
           description: formData.description,
           rating: formData.rating,
           stock: formData.stock,
           brand: formData.brand,
-          category: formData.category,  
-          thumbnail: formData.photo_link, 
+          category: formData.category,
+          thumbnail: formData.photo_link,
           closing_date: formData.closing_date,
-        })
+        }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.detail || "Error al crear la subasta");        
+        throw new Error(errorData.detail || "Error al editar la subasta");
       }
 
-      console.log("Subasta creada con éxito");
-      router.push("/my_auctions"); 
+      console.log("Subasta editada con éxito");
+      router.push(`/details/${id}`); 
     }
   };
 
-  const handleReset = () => {
-    setFormData({
-      name: "",
-      description: "",
-      price: "",
-      rating: "",
-      stock: "",
-      brand: "",
-      photo_link: "",
-      category: "",
-      closing_date: "",
-    });
-    setValidationErrors([]);
-    window.scrollTo(0, 0);
-  };
-
-  function returnButton () {
+  function discardChanges () {
     router.push("/my_auctions"); 
   }
 
   return (
     <main className={styles.mainContainer}>
       <section className={styles.container}>
-        <h2 className={styles.h2}>Crear Subasta</h2>
+        <h2 className={styles.h2}>Editar Subasta</h2>
         <form onSubmit={handleSubmit}>
           <fieldset className={styles.fieldset}>
             <label className={styles.label} htmlFor="name">Nombre del artículo *</label>
@@ -148,7 +148,6 @@ export default function CreateAuction() {
               className={styles.input}
               value={formData.name}
               onChange={handleChange}
-              placeholder="Vintage Loewe Purse"
               type="text"
             />
             {validationErrors.name && <span className={styles.error}>{validationErrors.name}</span>}
@@ -160,7 +159,6 @@ export default function CreateAuction() {
               className={styles.textarea}
               value={formData.description}
               onChange={handleChange}
-              placeholder="Describe el artículo"
             ></textarea>
             {validationErrors.description && <span className={styles.error}>{validationErrors.description}</span>}
 
@@ -171,7 +169,6 @@ export default function CreateAuction() {
               className={styles.input}
               value={formData.price}
               onChange={handleChange}
-              placeholder="4500"
               type="text"
             />
             {validationErrors.price && <span className={styles.error}>{validationErrors.price}</span>}
@@ -202,8 +199,7 @@ export default function CreateAuction() {
               className={styles.input}
               value={formData.stock}
               onChange={handleChange}
-              placeholder="Número de unidades a subastar"
-            ></input>
+            />
             {validationErrors.stock && <span className={styles.error}>{validationErrors.stock}</span>}
 
             <label className={styles.label} htmlFor="brand">Marca *</label>
@@ -213,8 +209,7 @@ export default function CreateAuction() {
               className={styles.input}
               value={formData.brand}
               onChange={handleChange}
-              placeholder="Marca del artículo"
-            ></input>
+            />
             {validationErrors.brand && <span className={styles.error}>{validationErrors.brand}</span>}
 
             <label className={styles.label} htmlFor="photo_link">Link foto *</label>
@@ -224,8 +219,7 @@ export default function CreateAuction() {
               className={styles.input}
               value={formData.photo_link}
               onChange={handleChange}
-              placeholder=""
-            ></input>
+            />
             {validationErrors.photo_link && <span className={styles.error}>{validationErrors.photo_link}</span>}
 
             <label className={styles.label} htmlFor="category">Categoría *</label>
@@ -234,11 +228,13 @@ export default function CreateAuction() {
               name="category"
               className={styles.input}
               value={formData.category}
-              onChange={(e) => setFormData({ ...formData, category: e.target.value })} 
+              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
             >
               <option value="">Selecciona una opción</option>
               {categories.map((category) => (
-                <option key={category.id} value={category.id}>{category.name}</option>
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
               ))}
             </select>
             {validationErrors.category && <span className={styles.error}>{validationErrors.category}</span>}
@@ -248,19 +244,16 @@ export default function CreateAuction() {
               id="closing_date"
               name="closing_date"
               className={styles.input}
-              type="date" 
+              type="date"
               value={formData.closing_date}
               onChange={handleChange}
-              placeholder="Selecciona una fecha"
-            ></input>
+            />
             {validationErrors.closing_date && <span className={styles.error}>{validationErrors.closing_date}</span>}
 
             <div className={styles.buttonContainer}>
-              <button className={styles.button} type="submit">Crear Subasta</button>
-              <button className={styles.button} type="button" onClick={() => handleReset()}>Limpiar campos</button>
-              <button className={styles.button} type="button" onClick={() => returnButton()}>Volver</button>
+              <button className={styles.button} type="submit">Guardar Cambios</button>
+              <button className={styles.button} type="button" onClick={() => discardChanges()}>Descartar cambios</button>
             </div>
-
           </fieldset>
         </form>
       </section>

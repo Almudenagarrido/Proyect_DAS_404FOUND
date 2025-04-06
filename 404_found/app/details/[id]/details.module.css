@@ -1,68 +1,238 @@
 .detailsContainer {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 30px;
     background-color: #f8f8f8;
     min-height: 100vh;
-}
-
-.productDetails {
-    display: flex;
     gap: 20px;
-    padding: 20px;
-    background-color: rgb(216, 143, 6);
-    border: 3px solid rgb(162, 107, 3);
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 1000px;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .row1 {
+    display: flex;
     width: 90%;
-    margin: 20px auto;
-}
-
-.productImage {
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 3px solid rgb(216, 143, 6);
+    margin-bottom: 20px;
+  }
+  
+  .row2 {
+    display: flex;
+    width: 95%;
+    justify-content: space-around;
+    margin: 20px 0;
+    background-color: #eaeaea;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+    gap: 15px;
+  }
+  
+  .imageCol {
+    border: 2px solid rgb(216, 143, 6);
+    flex: 0.4;
+    margin: 10px;
+    padding: 15px;
+    background-color: white;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 250px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .descriptionCol {
+    border: 2px solid rgb(216, 143, 6);
+    flex: 1;
+    margin: 10px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .descriptionCol p {
+    margin: 5px 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: rgb(15, 52, 47);
+  }
+  
+  .bidCol {
+    border: 2px solid rgb(216, 143, 6);
+    flex: 1;
+    margin: 10px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .titleCol {
+    font-size: 32px;
+    font-weight: bold;
+    color: rgb(15, 52, 47);
+  }
+  
+  .returnCol {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  
+  .button {
+    background-color: rgb(216, 143, 6);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: bold;
+  }
+  
+  .button:hover {
+    background-color: rgb(193, 127, 6);
+    transform: scale(1.05);
+  }
+  
+  .productImage {
     width: 100%;
-    max-width: 300px;
+    max-width: 200px;
     height: auto;
     border-radius: 8px;
     background-color: white;
-    padding: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding: 20px;
+    padding: 5px;
+  }
+  
+  .ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .bidTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
     background-color: white;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.info h2 {
-    font-size: 30px;
+    overflow: hidden;
+  }
+  
+  .bidTable th, .bidTable td {
+    padding: 10px 15px;
+    text-align: center;
+    border: none;
+    font-size: 14px;
+  }
+  
+  .bidTable th {
+    background-color: rgb(216, 143, 6);
+    color: white;
     font-weight: bold;
-    color: rgb(15, 52, 47);
-    margin-bottom: 10px;
-}
-
-.info p {
-    font-size: 16px;
-    margin: 8px 0;
-    font-weight: 400;
-    color: rgb(18, 65, 58);
-}
-
-.info strong {
-    font-size: 18px;
-    color: rgb(15, 52, 47);
-}
-
-.noDetalles {
-    margin: 18px;
-    text-align: left;
-    font-size: 18px;
+  }
+  
+  .bidTable tr {
+    transition: background-color 0.2s ease;
+  }
+  
+  .bidTable tr:hover {
+    background-color: rgba(216, 143, 6, 0.1);
+  }
+  
+  .bidTable td {
+    background-color: #f8f8f8;
     color: rgb(15, 52, 47);
   }
+  
+  .bidTable tr:nth-child(even) td {
+    background-color: #eeeeee;
+  }
+  
+  .bidForm {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 15px;
+  }
+  
+  .bidInput {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 100%;
+    font-size: 14px;
+  }
+  
+  .bidInput:focus {
+    outline: none;
+    border-color: rgb(216, 143, 6);
+    box-shadow: 0 0 4px rgba(216, 143, 6, 0.5);
+  }
+  
+  .noSession {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .loginButton {
+    background-color: rgb(216, 143, 6);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+  }
+  
+  .loginButton:hover {
+    background-color: rgb(193, 127, 6);
+  }
+
+  
+  .bidInputContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .usernameLabel {
+    font-size: 14px;
+    color: rgb(15, 52, 47);
+    background-color: #eeeeee;
+    padding: 8px;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+  
+  .bidInput {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 70%;
+    font-size: 14px;
+  }
+  
+  .bidInput:focus {
+    outline: none;
+    border-color: rgb(216, 143, 6);
+    box-shadow: 0 0 4px rgba(216, 143, 6, 0.5);
+  }
+  
