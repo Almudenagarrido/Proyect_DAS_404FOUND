@@ -85,3 +85,45 @@
 .button:hover {
     background-color: rgb(193, 127, 6);
 }
+
+.error {
+    color: red;
+    font-family: 'Arial', sans-serif;
+    font-size: 13px;
+    padding: 5px;
+    margin-bottom: 3px;
+}
+
+.saveButton {
+    background-color: rgb(216, 143, 6);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 3px 5px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    max-width: 100px;
+    font-weight: bold;
+}
+
+.saveButton:hover {
+    background-color:  rgb(193, 127, 6);
+}
+
+.cancelButton {
+    background-color: rgb(216, 143, 6);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 3px 5px;
+    font-size: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    max-width: 100px;
+    font-weight: bold;
+}
+
+.cancelButton:hover {
+    background-color:  rgb(193, 127, 6);
+}

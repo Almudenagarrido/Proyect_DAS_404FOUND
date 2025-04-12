@@ -226,10 +226,8 @@ export default function Register() {
         birth_date: formData.birthday,
         locality: formData.comunity,
         municipality: formData.city
-      }
-      console.log("postData");
-      console.log(postData);
-
+      };
+  
       const response = await fetch("http://127.0.0.1:8000/api/users/register/", {
         method: "POST",
         headers: {
@@ -238,21 +236,37 @@ export default function Register() {
         },
         body: JSON.stringify(postData)
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
         console.log("Usuario registrado:", data);
         router.push("/login");
       } else {
-        console.log("Error en el registro:", data);
-        setValidationErrors({ apiError: data.error || "Error en el servidor"});
-      }
+        const backendErrors = { ...validationErrors };
+
+        for (const key in data) {
+          const field = key === "username" ? "user" :
+                        key === "first_name" ? "name" :
+                        key === "last_name" ? "surname" :
+                        key === "email" ? "mail" :
+                        key; // para otros campos que coincidan
+
+          if (Array.isArray(data[key])) {
+            backendErrors[field] = data[key][0];
+          } else {
+            backendErrors[field] = data[key];
+          }
+        }
+
+        setValidationErrors(backendErrors);
+      }      
     } catch (error) {
       console.log("Error de conexión:", error);
       setValidationErrors({ apiError: "Hubo un problema al intentar conectar con el servidor." });
     }
   };
+  
 
   // Submit form
   const handleSubmit = async (event) => {
@@ -274,6 +288,7 @@ export default function Register() {
             </p>
 
             <label className={`${styles.label}`} htmlFor="name">Nombre *</label>
+            {validationErrors.name && <span className={styles.hide_span}>{validationErrors.name}</span>}
             {validationErrors.name && <span className={styles.hide_span}>{validationErrors.name}</span>}
             <input
               id="name"

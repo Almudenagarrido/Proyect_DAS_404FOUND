@@ -15,80 +15,73 @@ export default function CreateAuction() {
     photo_link: "",
     category: "",
     closing_date: "",
+    auctioneer: "",
   });
-  const [validationErrors, setValidationErrors] = useState([]);
+  const [userData, setUserData] = useState(null);
+  const [error, setError] = useState("");
+  const [validationErrors, setValidationErrors] = useState({});
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-      fetch("http://127.0.0.1:8000/api/auctions/categories/")  
-        .then((response) => {
-          return response.json(); 
-        })
-        .then((data) => {
-          setCategories(data.results);
-        })
-        .catch((error) => {
-          console.error("Error al cargar las categorías:", error); 
+    const fetchUserData = async () => {
+      const token = localStorage.getItem("access");
+
+      if (!token) {
+        router.push("/login");
+        return;
+      }
+
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/users/profile/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
         });
-    }, []);
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserData(data);
+        } else {
+          setError("No se pudo obtener la información del perfil.");
+        }
+      } catch (error) {
+        setError("Hubo un problema al intentar conectar con el servidor.");
+        console.error("Error de conexión:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [router]);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/auctions/categories/")
+      .then((response) => response.json())
+      .then((data) => {
+        setCategories(data.results);
+      })
+      .catch((error) => {
+        console.error("Error al cargar las categorías:", error);
+      });
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    validateField(name, value);
+    setValidationErrors((prev) => ({ ...prev, [name]: "" }));
   };
-
-  const validateField = (fieldName, fieldValue) => {
-    const errors = { ...validationErrors };
-
-    if (!fieldValue.trim() && fieldName !== "rating") {
-      errors[fieldName] = "Este campo es obligatorio";
-    } else {
-      delete errors[fieldName];
-    }
-
-    if (fieldName === "price" && isNaN(Number(fieldValue))) {
-      errors.price = "El precio debe ser un número válido";
-    }
-
-    if (fieldName === "rating" && isNaN(fieldValue)) {
-      errors.rating = "La puntuación debe estar entre 0 y 5";
-    }
-
-    setValidationErrors(errors);
-  };
-
-  const validateFields = () => {
-    const errors = {};
-
-    Object.keys(formData).forEach((field) => {
-        const fieldValue = formData[field];
-
-        if (typeof fieldValue === "string" && !fieldValue.trim()) {
-            errors[field] = "Este campo es obligatorio";
-        }
-        else if (field === "price" && isNaN(Number(fieldValue))) {
-            errors.price = "El precio debe ser un número válido";
-        }
-        else if (field === "rating" && (fieldValue < 0 || fieldValue > 5)) {
-            errors.rating = "La puntuación debe estar entre 0 y 5";
-        }
-    });
-
-    setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (validateFields()) {
-      console.log("Auction Data:", formData);
-  
+    const token = localStorage.getItem("access");
+
+    try {
       const response = await fetch("http://127.0.0.1:8000/api/auctions/", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({
           title: formData.name,
@@ -100,19 +93,28 @@ export default function CreateAuction() {
           category: formData.category,
           thumbnail: formData.photo_link,
           closing_date: formData.closing_date,
+          auctioneer: userData.id,
         })
       });
-  
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Error al crear la subasta");
+        if (response.status === 400) {
+          const errorData = await response.json();
+          setValidationErrors(errorData);
+          console.log("error");
+          console.log(errorData);
+        } else {
+          throw new Error("Error al crear la subasta");
+        }
+        return;
       }
-  
-      console.log("Subasta creada con éxito");
+
       router.push("/my_auctions");
+    } catch (error) {
+      console.error("Error al crear subasta:", error);
+      setError("Hubo un problema al enviar la subasta.");
     }
   };
-  
 
   const handleReset = () => {
     setFormData({
@@ -126,19 +128,20 @@ export default function CreateAuction() {
       category: "",
       closing_date: "",
     });
-    setValidationErrors([]);
+    setValidationErrors({});
     window.scrollTo(0, 0);
   };
 
-  function returnButton () {
-    router.push("/my_auctions"); 
+  function returnButton() {
+    router.push("/my_auctions");
   }
 
   return (
     <main className={styles.mainContainer}>
       <section className={styles.container}>
         <h2 className={styles.h2}>Crear Subasta</h2>
-      <form onSubmit={handleSubmit}>
+        {error && <p className={styles.error}>{error}</p>}
+        <form onSubmit={handleSubmit}>
           <fieldset className={styles.fieldset}>
             <label className={styles.label} htmlFor="name">Nombre del artículo *</label>
             <input
@@ -150,7 +153,7 @@ export default function CreateAuction() {
               placeholder="Vintage Loewe Purse"
               type="text"
             />
-            {validationErrors.name && <span className={styles.error}>{validationErrors.name}</span>}
+            {validationErrors.title && <span className={styles.error}>{validationErrors.title}</span>}
 
             <label className={styles.label} htmlFor="description">Descripción *</label>
             <textarea
@@ -225,7 +228,7 @@ export default function CreateAuction() {
               onChange={handleChange}
               placeholder=""
             ></input>
-            {validationErrors.photo_link && <span className={styles.error}>{validationErrors.photo_link}</span>}
+            {validationErrors.thumbnail && <span className={styles.error}>{validationErrors.thumbnail}</span>}
 
             <label className={styles.label} htmlFor="category">Categoría *</label>
             <select
@@ -233,7 +236,7 @@ export default function CreateAuction() {
               name="category"
               className={styles.input}
               value={formData.category}
-              onChange={(e) => setFormData({ ...formData, category: e.target.value })} 
+              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
             >
               <option value="">Selecciona una opción</option>
               {categories.map((category) => (
@@ -247,7 +250,7 @@ export default function CreateAuction() {
               id="closing_date"
               name="closing_date"
               className={styles.input}
-              type="date" 
+              type="date"
               value={formData.closing_date}
               onChange={handleChange}
               placeholder="Selecciona una fecha"
@@ -256,10 +259,9 @@ export default function CreateAuction() {
 
             <div className={styles.buttonContainer}>
               <button className={styles.button} type="submit">Crear Subasta</button>
-              <button className={styles.button} type="button" onClick={() => handleReset()}>Limpiar campos</button>
-              <button className={styles.button} type="button" onClick={() => returnButton()}>Volver</button>
+              <button className={styles.button} type="button" onClick={handleReset}>Limpiar campos</button>
+              <button className={styles.button} type="button" onClick={returnButton}>Volver</button>
             </div>
-
           </fieldset>
         </form>
       </section>

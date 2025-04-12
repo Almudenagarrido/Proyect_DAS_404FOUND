@@ -142,8 +142,8 @@
 }
 
 .noSubastas {
-  text-align: left;
-  font-size: 18px;
+  text-align: center;
+  font-size: 20px;
   color: rgb(15, 52, 47);
 }
 
@@ -153,4 +153,23 @@
   color: rgb(15, 52, 47);
   text-align: center;
   margin-top: 30px;
+}
+
+.emptyButton {
+  background-color: rgb(216, 143, 6);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  max-width: 200px;
+  display: flex;
+  font-weight: bold;
+  margin: 10px;
+}
+
+.emptyButton:hover {
+  background-color:  rgb(193, 127, 6);
 }

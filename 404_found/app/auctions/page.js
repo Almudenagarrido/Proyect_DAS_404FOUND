@@ -1,79 +1,91 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./auctions.module.css";
 
 export default function Auction() {
   const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(100000);
   const [possibleCategories, setPossibleCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectAllCategories, setSelectAllCategories] = useState(true); 
+  const [selectAllCategories, setSelectAllCategories] = useState(true);
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(100000);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
+  const router = useRouter();
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/auctions/")
+    const token = localStorage.getItem("access");
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/auctions/categories/")
+      .then((response) => response.json())
+      .then((data) => {
+        setPossibleCategories(data.results);
+      })
+      .catch((error) => {
+        console.error("Error al cargar las categorías:", error);
+      });
+  }, []);
+
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+
+    if (searchQuery) {
+      params.append("texto", searchQuery);
+    }
+
+    if (!selectAllCategories && selectedCategories.length > 0) {
+      const selectedCategoryName = possibleCategories.find(
+        (cat) => cat.id === selectedCategories[0]
+      )?.name;
+      if (selectedCategoryName) {
+        params.append("categoria", selectedCategoryName);
+      }
+    }
+
+    params.append("precioMin", minPrice.toString());
+    params.append("precioMax", maxPrice.toString());
+
+    fetch(`http://127.0.0.1:8000/api/auctions/?${params.toString()}`)
       .then((response) => response.json())
       .then((data) => {
         setProducts(data.results);
-        setFilteredProducts(data.results);
-      })
-      .catch((error) => console.error("Error al cargar las subastas:", error));
-  }, []);
-
-  useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/auctions/categories/")  
-      .then((response) => {
-        return response.json(); 
-      })
-      .then((data) => {
-        const categories = data.results; 
-        console.log("Categorías recibidas:", categories);
-        setPossibleCategories(categories);
       })
       .catch((error) => {
-        console.error("Error al cargar las categorías:", error); 
+        console.error("Error al cargar subastas:", error);
       });
-  }, []);
-  
+  }, [searchQuery, minPrice, maxPrice, selectedCategories, selectAllCategories, possibleCategories]);
 
-  useEffect(() => {
-    const filtered = products.filter((product) => {
-      const matchesSearch =
-        product.title.toLowerCase().includes(searchQuery) ||
-        product.description.toLowerCase().includes(searchQuery);
-
-      const matchesPrice = product.price >= minPrice && product.price <= maxPrice;
-      
-      console.log("Categorías seleccionadas:", selectedCategories);
-      console.log("Categoría:", product.category);
-      const matchesCategory =
-        selectedCategories.length === 0 || selectedCategories.includes(product.category);
-      console.log("Encaja categoria:", matchesCategory);
-
-      return matchesSearch && matchesPrice && matchesCategory;
-    });
-
-    setFilteredProducts(filtered);
-  }, [searchQuery, minPrice, maxPrice, selectedCategories, products]);
-
-  const handleCategoryChange = (category) => {
+  const handleCategoryChange = (categoryId) => {
     setSelectedCategories((prev) =>
-      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
+      prev.includes(categoryId)
+        ? prev.filter((id) => id !== categoryId)
+        : [categoryId] 
     );
+    setSelectAllCategories(false);
   };
 
   const handleSelectAllChange = () => {
-    if (selectAllCategories) {
-      setSelectedCategories([]); 
+    setSelectedCategories([]);
+    setSelectAllCategories(!selectAllCategories);
+  };
+
+  const handleEmptyAction = () => {
+    if (isAuthenticated) {
+      router.push("/edit_auction");
     } else {
-      setSelectedCategories(possibleCategories.map((category) => category.id)); 
+      router.push("/register");
     }
-    setSelectAllCategories(!selectAllCategories); 
   };
 
   return (
@@ -114,27 +126,27 @@ export default function Auction() {
                 checked={selectAllCategories}
                 onChange={handleSelectAllChange}
               />
-              <label htmlFor="selectAllCategories">todas</label>
+              <label htmlFor="selectAllCategories">Todas</label>
             </div>
 
             {possibleCategories.map((category) => (
               <div key={category.id}>
                 <input
                   type="checkbox"
-                  id={category.name}
+                  id={`cat-${category.id}`}
                   checked={selectedCategories.includes(category.id)}
-                  onChange={() => handleCategoryChange(category.id)} 
-                  disabled={selectAllCategories} 
+                  onChange={() => handleCategoryChange(category.id)}
+                  disabled={selectAllCategories}
                 />
-                <label htmlFor={category.name}>{category.name}</label> 
+                <label htmlFor={`cat-${category.id}`}>{category.name}</label>
               </div>
             ))}
           </div>
         </aside>
 
         <section className={styles.productsContainer}>
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product) => (
+          {products.length > 0 ? (
+            products.map((product) => (
               <div key={product.id} className={styles.subasta}>
                 <div className={styles.subastaContenido}>
                   <Link href={`/details/${product.id}`}>
@@ -152,13 +164,17 @@ export default function Auction() {
               </div>
             ))
           ) : (
-            <p className={styles.noSubastas}>
-              {searchQuery ? "No se encontraron subastas con ese término." : "Cargando subastas..."}
-            </p>
+            <div className={styles.noSubastasContainer}>
+              <p className={styles.noSubastas}>No se encontraron subastas.</p>
+              <button className={styles.emptyButton} onClick={handleEmptyAction}>
+                {isAuthenticated
+                  ? "¡Publica una subasta!"
+                  : "Regístrate para poder subir una subasta"}
+              </button>
+            </div>
           )}
         </section>
       </div>
     </main>
   );
 }
-

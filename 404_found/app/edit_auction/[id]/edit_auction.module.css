@@ -199,3 +199,11 @@
 .buttonContainer {
     display: flex;
 }
+
+.error {
+    color: red;
+    font-family: 'Arial', sans-serif;
+    font-size: 13px;
+    padding: 5px;
+    margin-bottom: 3px;
+}

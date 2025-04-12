@@ -13,7 +13,6 @@ export default function LogIn() {
 
   const [validationError, setValidationError] = useState("");
 
-  // Change the data when it is put into the input
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -22,7 +21,6 @@ export default function LogIn() {
     }));
   };
 
-  // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -35,8 +33,7 @@ export default function LogIn() {
       const logInData = {
         username: formData.username,
         password: formData.password          
-      }
-      console.log(logInData);
+      };
       
       const response = await fetch("http://127.0.0.1:8000/api/users/login/", {
         method: "POST",
@@ -48,17 +45,17 @@ export default function LogIn() {
       });
 
       const data = await response.json();
-      console.log("data");
-      console.log(data);
 
       if (response.ok) {
-        console.log("Inicio de sesión!!", data);
         localStorage.setItem("access", data.access);  
         localStorage.setItem("username", data.username);
         window.location.reload(); 
         router.push("/");
+      } else if (response.status === 400) {
+        const detailError = data?.non_field_errors?.[0] || data?.error || "Credenciales inválidas.";
+        setValidationError(detailError);
       } else {
-        setValidationError(data.error || "Error al iniciar sesión.");
+        setValidationError("Error al iniciar sesión.");
       }
     } catch (error) {
       setValidationError("Hubo un problema al intentar conectar con el servidor.");
