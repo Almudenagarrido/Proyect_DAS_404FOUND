@@ -37,7 +37,8 @@ export default function LogIn() {
         password: formData.password          
       }
       console.log(logInData);
-      const response = await fetch("https://das-p2-backend.onrender.com/api/users/login/", {
+      
+      const response = await fetch("http://127.0.0.1:8000/api/users/login/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,7 +54,7 @@ export default function LogIn() {
       if (response.ok) {
         console.log("Inicio de sesión!!", data);
         localStorage.setItem("access", data.access);  
-        localStorage.setItem("username", data.username); 
+        localStorage.setItem("username", data.username);
         window.location.reload(); 
         router.push("/");
       } else {

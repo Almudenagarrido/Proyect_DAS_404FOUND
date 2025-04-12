@@ -48,14 +48,8 @@ export default function Auction() {
     setFilteredProducts(filtered);
   }, [searchQuery, minPrice, maxPrice, selectedCategories, products]);
 
-  const handleCategoryChange = (category) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
-    );
-  };
-
   function auctionRegister() {
-    router.push("/create_auction")
+    router.push("/edit_auction")
   }
 
   function deleteButtonClick(product_id) {

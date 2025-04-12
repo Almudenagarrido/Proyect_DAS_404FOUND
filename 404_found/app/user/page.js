@@ -8,6 +8,8 @@ export default function UserProfile() {
   const [error, setError] = useState("");  
   const [isEditing, setIsEditing] = useState(false); 
   const [editedData, setEditedData] = useState({}); 
+  const [isPasswordChange, setIsPasswordChange] = useState(false);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -20,7 +22,7 @@ export default function UserProfile() {
       }
 
       try {
-        const response = await fetch("https://das-p2-backend.onrender.com/api/users/profile", {
+        const response = await fetch("http://127.0.0.1:8000/api/users/profile/", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -52,10 +54,41 @@ export default function UserProfile() {
     setIsEditing(true);
   };
 
-  const handleSave = () => {
-    // PONER AQUÍ LO QUE HAYA QUE HACER EN LOS PRÓXIMOS PASOS
-    setUserData(editedData);  
-    setIsEditing(false);  
+  const handleSave = async () => {
+    const token = localStorage.getItem("access");  
+
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    if (editedData.password && editedData.password !== editedData.password_confirm) {
+      setError("Las contraseñas no coinciden.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/users/${userData.id}/`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` 
+        },
+        body: JSON.stringify(editedData)
+      });
+
+      if (response.ok) {
+        const updatedData = await response.json();
+        setUserData(updatedData);
+        setIsEditing(false);
+        setIsPasswordChange(false);
+      } else {
+        setError("No se pudo actualizar el perfil: " + error); 
+      }
+    } catch (error) {
+      setError("Hubo un problema al intentar conectar con el servidor.");
+      console.error("Error de conexión:", error);
+    }
   };
 
   if (error) {
@@ -175,7 +208,40 @@ export default function UserProfile() {
               <span>{userData.municipality}</span>
             )}
           </section>
+          {isPasswordChange && isEditing && (
+            <>
+              <section className={styles.profileItem}>
+                <p className={styles.p}>Nueva Contraseña:</p>
+                <input
+                  type="password"
+                  name="password"
+                  value={editedData.password || ""}
+                  onChange={handleChange}
+                  className={styles.input}
+                />
+              </section>
 
+              <section className={styles.profileItem}>
+                <p className={styles.p}>Confirmar Contraseña:</p>
+                <input
+                  type="password"
+                  name="password_confirm"
+                  value={editedData.password_confirm || ""}
+                  onChange={handleChange}
+                  className={styles.input}
+                />
+              </section>
+            </>
+          )}
+
+          {isEditing && !isPasswordChange && (
+            <button
+              onClick={() => setIsPasswordChange(true)}
+              className={styles.button}
+            >
+              Cambiar Contraseña
+            </button>
+          )}
           {!isEditing && (
             <button onClick={handleEditClick} className={styles.button}>
               Modificar

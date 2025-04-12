@@ -51,14 +51,17 @@ export default function ProductDetails() {
       const bidData = {
         bidder: username,
         price: parseFloat(newBid),
-        auction: id  // Añadido el campo auction
+        auction: id
       };
 
       try {
+        const token = localStorage.getItem('access');
+
         const response = await fetch(`http://127.0.0.1:8000/api/auctions/${id}/bids/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify(bidData),
         });
@@ -69,7 +72,8 @@ export default function ProductDetails() {
           setBids((prevBids) => [result, ...prevBids]);
           setNewBid('');
         } else {
-          alert('Error al realizar la puja. Inténtelo de nuevo.');
+          const error = await response.json();
+          alert(`Error al realizar la puja: ${error.detail || 'Un error desconocido ocurrió'}. Inténtelo de nuevo.`);
         }
       } catch (error) {
         console.error('Error al enviar la puja:', error);

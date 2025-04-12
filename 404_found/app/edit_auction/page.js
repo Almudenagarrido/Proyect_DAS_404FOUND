@@ -5,7 +5,6 @@ import styles from "./create_auction.module.css";
 
 export default function CreateAuction() {
   const router = useRouter();
-  const data = ["name", "description", "price", "rating", "stock", "brand", "photo_link", "category", "closing_date"];
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -26,9 +25,7 @@ export default function CreateAuction() {
           return response.json(); 
         })
         .then((data) => {
-          const categories = data.results; 
-          console.log("Categorías recibidas:", categories);
-          setCategories(categories);
+          setCategories(data.results);
         })
         .catch((error) => {
           console.error("Error al cargar las categorías:", error); 
@@ -87,33 +84,35 @@ export default function CreateAuction() {
     event.preventDefault();
     if (validateFields()) {
       console.log("Auction Data:", formData);
+  
       const response = await fetch("http://127.0.0.1:8000/api/auctions/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          title: formData.name,  
+          title: formData.name,
           price: parseFloat(formData.price),
           description: formData.description,
           rating: formData.rating,
           stock: formData.stock,
           brand: formData.brand,
-          category: formData.category,  
-          thumbnail: formData.photo_link, 
+          category: formData.category,
+          thumbnail: formData.photo_link,
           closing_date: formData.closing_date,
         })
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.detail || "Error al crear la subasta");        
+        throw new Error(errorData.detail || "Error al crear la subasta");
       }
-
+  
       console.log("Subasta creada con éxito");
-      router.push("/my_auctions"); 
+      router.push("/my_auctions");
     }
   };
+  
 
   const handleReset = () => {
     setFormData({
@@ -139,7 +138,7 @@ export default function CreateAuction() {
     <main className={styles.mainContainer}>
       <section className={styles.container}>
         <h2 className={styles.h2}>Crear Subasta</h2>
-        <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
           <fieldset className={styles.fieldset}>
             <label className={styles.label} htmlFor="name">Nombre del artículo *</label>
             <input
