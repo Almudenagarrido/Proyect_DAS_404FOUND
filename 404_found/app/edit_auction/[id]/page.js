@@ -103,10 +103,12 @@ export default function EditAuction() {
     event.preventDefault();
     if (validateFields()) {
       console.log("Datos de la subasta editados:", formData);
+      const token = localStorage.getItem('access');
       const response = await fetch(`http://127.0.0.1:8000/api/auctions/${id}/`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify({
           title: formData.name,
