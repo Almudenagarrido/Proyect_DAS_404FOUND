@@ -34,7 +34,6 @@ export default function ProductDetails() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
           },
         });
   
@@ -42,20 +41,25 @@ export default function ProductDetails() {
         const productData = await productResponse.json();
         setProduct(productData);
   
-        // 2. Auctioneer
-        if (productData.auctioneer) {
-          const auctioneerResponse = await fetch(`http://127.0.0.1:8000/api/users/${productData.auctioneer}/`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`,
-            },
-          });
-  
-          if (!auctioneerResponse.ok) throw new Error("Error al obtener el subastador");
-          const auctioneerData = await auctioneerResponse.json();
-          setAuctioneerName(auctioneerData.username); // o `${auctioneerData.first_name} ${auctioneerData.last_name}`
+        if (token) {
+          // 2. Auctioneer
+          if (productData.auctioneer) {
+            const auctioneerResponse = await fetch(`http://127.0.0.1:8000/api/users/${productData.auctioneer}/`, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+              },
+            });
+    
+            if (!auctioneerResponse.ok) throw new Error("Error al obtener el subastador");
+            const auctioneerData = await auctioneerResponse.json();
+            setAuctioneerName(auctioneerData.username); // o `${auctioneerData.first_name} ${auctioneerData.last_name}`
+          }
+        } else {
+          setAuctioneerName("Solo para usuarios");
         }
+        
   
         // 3. Category
         if (productData.category) {
