@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import styles from "./my_auctions.module.css";
@@ -17,10 +17,9 @@ export default function Auction() {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [currentUserId, setCurrentUserId] = useState(null);
   const searchParams = useSearchParams();
-  const searchQuery = searchParams.get("search")?.toLowerCase() || "";
   const router = useRouter();
 
-  // Current autenticated user
+  // Current authenticated user
   useEffect(() => {
     const token = localStorage.getItem("access");
 
@@ -58,46 +57,56 @@ export default function Auction() {
       });
   }, []);
 
-    // Obtener rango de precios al cargar
-    useEffect(() => {
-      fetch("http://127.0.0.1:8000/api/auctions/")
-        .then((res) => res.json())
-        .then((data) => {
-          const prices = data.results.map((p) => p.price);
-          const min = Math.min(...prices);
-          const max = Math.max(...prices);
-          setMinAvailablePrice(min);
-          setMaxAvailablePrice(max);
-          setMinPrice(min);
-          setMaxPrice(max);
-        })
-        .catch((err) => console.error("Error al obtener precios:", err));
-    }, []);
-  
-   // Obtener productos según filtros
-   useEffect(() => {
+  // Obtener rango de precios al cargar
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/auctions/")
+      .then((res) => res.json())
+      .then((data) => {
+        const prices = data.results.map((p) => p.price);
+        const min = Math.min(...prices);
+        const max = Math.max(...prices);
+        setMinAvailablePrice(min);
+        setMaxAvailablePrice(max);
+        setMinPrice(min);
+        setMaxPrice(max);
+      })
+      .catch((err) => console.error("Error al obtener precios:", err));
+  }, []);
+
+  // Lógica para los parámetros de búsqueda
+  useEffect(() => {
+    const searchQuery = searchParams.get("search")?.toLowerCase() || "";
     const params = new URLSearchParams();
     if (searchQuery) params.append("texto", searchQuery);
-  
+
     if (!selectAllCategories && selectedCategories.length > 0) {
-      const selectedName = possibleCategories.find(cat => cat.id === selectedCategories[0])?.name;
+      const selectedName = possibleCategories.find(
+        (cat) => cat.id === selectedCategories[0]
+      )?.name;
       if (selectedName) params.append("categoria", selectedName);
     }
-  
+
     params.append("precioMin", minPrice.toString());
     params.append("precioMax", maxPrice.toString());
-  
+
     fetch(`http://127.0.0.1:8000/api/auctions/?${params.toString()}`)
       .then((res) => res.json())
       .then((data) => setProducts(data.results))
       .catch((err) => console.error("Error al cargar subastas:", err));
-  }, [searchQuery, minPrice, maxPrice, selectedCategories, selectAllCategories, possibleCategories]);
+  }, [
+    searchParams,
+    minPrice,
+    maxPrice,
+    selectedCategories,
+    selectAllCategories,
+    possibleCategories,
+  ]);
 
   const handleCategoryChange = (categoryId) => {
     setSelectedCategories((prev) =>
       prev.includes(categoryId)
         ? prev.filter((id) => id !== categoryId)
-        : [categoryId] 
+        : [categoryId]
     );
     setSelectAllCategories(false);
   };
@@ -134,23 +143,26 @@ export default function Auction() {
 
   // Filters
   useEffect(() => {
+    const searchQuery = searchParams.get("search")?.toLowerCase() || "";  // Define searchQuery here
+    
     const filtered = products.filter((product) => {
       const matchesSearch =
         product.title.toLowerCase().includes(searchQuery) ||
         product.description.toLowerCase().includes(searchQuery);
-
+  
       const matchesPrice =
         product.price >= minPrice && product.price <= maxPrice;
-
+  
       const matchesCategory =
         selectedCategories.length === 0 ||
         selectedCategories.includes(product.category);
-
+  
       return matchesSearch && matchesPrice && matchesCategory;
     });
-
+  
     setFilteredProducts(filtered);
-  }, [searchQuery, minPrice, maxPrice, selectedCategories, products]);
+  }, [searchParams, minPrice, maxPrice, selectedCategories, products]);
+  
 
   function auctionRegister() {
     router.push("/edit_auction");
@@ -200,16 +212,16 @@ export default function Auction() {
         <aside className={styles.sidebar}>
           <label>Rango de Precios:</label>
           <div className={styles.priceRange}>
-          <input
-                type="range"
-                min={minAvailablePrice}
-                max={maxAvailablePrice}
-                value={minPrice}
-                onChange={(e) => {
-                  const newMin = Number(e.target.value);
-                  if (newMin <= maxPrice) setMinPrice(newMin);
-                }}
-              />
+            <input
+              type="range"
+              min={minAvailablePrice}
+              max={maxAvailablePrice}
+              value={minPrice}
+              onChange={(e) => {
+                const newMin = Number(e.target.value);
+                if (newMin <= maxPrice) setMinPrice(newMin);
+              }}
+            />
             <span>Min: {minPrice} €</span>
             <input
               type="range"
@@ -252,56 +264,58 @@ export default function Auction() {
         </aside>
 
         <section className={styles.productsContainer}>
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product) => (
-              <div key={product.id} className={styles.subasta}>
-                <div className={styles.subastaContenido}>
-                  <div className={styles.imageWrapper}>
-                    <img
-                      src={product.thumbnail}
-                      alt={product.title}
-                      className={styles.productThumbnail}
-                    />
-                  </div>
-                  <h3 className={styles.subastaTitle}>{product.title}</h3>
-                  <section className={styles.buttonContainer}>
-                    <Link href={`/edit_auction/${product.id}`}>
-                      <button className={styles.editButton}>
+          <Suspense fallback={<p>Cargando subastas...</p>}>
+            {filteredProducts.length > 0 ? (
+              filteredProducts.map((product) => (
+                <div key={product.id} className={styles.subasta}>
+                  <div className={styles.subastaContenido}>
+                    <div className={styles.imageWrapper}>
+                      <img
+                        src={product.thumbnail}
+                        alt={product.title}
+                        className={styles.productThumbnail}
+                      />
+                    </div>
+                    <h3 className={styles.subastaTitle}>{product.title}</h3>
+                    <section className={styles.buttonContainer}>
+                      <Link href={`/edit_auction/${product.id}`}>
+                        <button className={styles.editButton}>
+                          <Image
+                            src="/images/pencil.webp"
+                            alt="Editar"
+                            width={50}
+                            height={50}
+                            className={styles.image}
+                            priority
+                          />
+                        </button>
+                      </Link>
+
+                      <button
+                        className={styles.deleteButton}
+                        onClick={() => deleteButtonClick(product.id)}
+                      >
                         <Image
-                          src="/images/pencil.webp"
-                          alt="Editar"
+                          src="/images/basurita.png"
+                          alt="Eliminar"
                           width={50}
                           height={50}
                           className={styles.image}
                           priority
                         />
                       </button>
-                    </Link>
-
-                    <button
-                      className={styles.deleteButton}
-                      onClick={() => deleteButtonClick(product.id)}
-                    >
-                      <Image
-                        src="/images/basurita.png"
-                        alt="Eliminar"
-                        width={50}
-                        height={50}
-                        className={styles.image}
-                        priority
-                      />
-                    </button>
-                  </section>
+                    </section>
+                  </div>
                 </div>
-              </div>
-            ))
-          ) : (
-            <p className={styles.noSubastas}>
-              {searchQuery
-                ? "No se encontraron subastas con ese término."
-                : "Cargando subastas..."}
-            </p>
-          )}
+              ))
+            ) : (
+              <p className={styles.noSubastas}>
+                {searchParams.get("search")
+                  ? "No se encontraron subastas con ese término."
+                  : "Cargando subastas..."}
+              </p>
+            )}
+          </Suspense>
         </section>
       </div>
     </main>
