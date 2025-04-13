@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./auctions.module.css";
 
-export default function Auction() {
+// Componente para envolver el contenido en Suspense
+function AuctionContent() {
   const [products, setProducts] = useState([]);
   const [possibleCategories, setPossibleCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -189,5 +190,13 @@ export default function Auction() {
         </section>
       </div>
     </main>
+  );
+}
+
+export default function Auction() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AuctionContent />
+    </Suspense>
   );
 }
