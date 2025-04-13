@@ -1,7 +1,30 @@
 .auctionPage {
+  padding: 40px;
+  background-color: #f8f8f8;
+}
+
+.information {
   display: flex;
-  padding: 20px;
-  gap: 20px;
+}
+
+.header {
+  width: 90%;
+  margin: 20px auto;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  color: rgb(15, 52, 47);
+  margin-left: 10px;
+}
+
+.line {
+  border: none;
+  height: 3px;
+  background-color: rgb(216, 143, 6);
+  margin: 5px 0 20px 10px;
+  width: 95%;
 }
 
 .sidebar {
@@ -110,9 +133,17 @@
   text-decoration: none;
 }
 
+.subastaPrice {
+  color: black;
+  font-size: 14px;
+  font-weight: normal;
+  margin-top: 8px;
+  text-decoration: none;
+}
+
 .noSubastas {
-  text-align: left;
-  font-size: 18px;
+  text-align: center;
+  font-size: 20px;
   color: rgb(15, 52, 47);
 }
 
@@ -122,4 +153,23 @@
   color: rgb(15, 52, 47);
   text-align: center;
   margin-top: 30px;
+}
+
+.emptyButton {
+  background-color: rgb(216, 143, 6);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  max-width: 200px;
+  display: flex;
+  font-weight: bold;
+  margin: 10px;
+}
+
+.emptyButton:hover {
+  background-color:  rgb(193, 127, 6);
 }

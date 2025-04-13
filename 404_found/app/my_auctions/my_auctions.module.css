@@ -1,0 +1,208 @@
+.auctionPage {
+    display: column;
+    padding: 20px;
+    gap: 20px;
+    background-color: white;
+  }
+
+.information {
+display: flex;
+}
+
+.header {
+width: 90%;
+margin: 20px auto;
+}
+
+.productsContainer {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.title {
+    font-size: 32px;
+    font-weight: bold;
+    color: rgb(15, 52, 47);
+    margin-left: 10px;
+    padding: 20px;
+}
+
+.line {
+    border: none;
+    height: 3px;
+    background-color: rgb(216, 143, 6);
+    margin: 5px 0 20px 10px;
+    width: 95%;
+}
+
+.sidebar {
+    background-color: white;
+    height: 100%;
+    border: 3px solid rgb(216, 143, 6);
+    border-radius: 15px;
+    border-width: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    flex: 0 0 200px;
+}
+
+.sidebar label {
+    font-size: 14px;
+    color: black;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.sidebar .priceRange {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidebar .priceRange input {
+    width: 100%;
+    margin: 5px 0;
+}
+
+.sidebar .priceRange span {
+    font-size: 12px;
+    color: black;
+}
+
+.sidebar .categories {
+    margin-top: 10px;
+}
+
+.sidebar .categories div {
+    margin-bottom: 10px;
+}
+
+.sidebar .categories input {
+    margin-right: 8px;
+}
+
+.subasta {
+    background-color: rgb(216, 143, 6);
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+    border: 3px solid rgb(162, 107, 3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.subasta:hover {
+    transform: scale(1.04);
+}
+
+.subastaContenido {
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.imageWrapper {
+    background-color: white;
+    padding: 10px;
+    border-radius: 8px;
+    border: 3px solid rgb(162, 107, 3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.productThumbnail {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.subastaTitle {
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 8px;
+    text-decoration: none;
+}
+
+.noSubastas {
+    text-align: left;
+    font-size: 18px;
+    color: rgb(15, 52, 47);
+}
+
+.h1 {
+    font-size: 36px;
+    font-weight: bold;
+    color: rgb(15, 52, 47);
+    text-align: center;
+    margin-top: 30px;
+}
+
+.image {
+    height: 20px;
+    width: 20px;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    gap: 10px;
+    margin: 10px;
+}
+
+.editButton:hover {
+    background-color: lightgoldenrodyellow;
+    border-color: yellow;
+}
+
+.deleteButton:hover {
+    background-color: lightcoral;
+    border-color: red;
+}
+
+.editButton {
+    padding: 3px;
+    border-radius: 3px;
+    border-color: grey;
+}
+
+.deleteButton {
+    padding: 3px;
+    border-radius: 3px;
+    border-color: grey;
+}
+
+.createButton {
+    background-color: rgb(216, 143, 6);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    max-width: 200px;
+    display: flex;
+    font-weight: bold;
+}
+
+.createButton:hover {
+    background-color:  rgb(193, 127, 6);
+}
+
+.buttonContainer {
+    align-items: center;
+}

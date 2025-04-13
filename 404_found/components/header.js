@@ -41,7 +41,7 @@ export default function Header() {
           <li className={styles.navItem}>
             <Link href={"/"}>
               <Image
-                src="/images/imagen_capibara.webp"
+                src="/images/perry_the_platapus.png"
                 alt="Logo"
                 width={50}
                 height={50}
@@ -96,7 +96,10 @@ export default function Header() {
                 <Link className={styles.navLink} href={"/auctions"}>Subastas</Link>
               </li>
               <li>
-                <Link className={styles.navLink} href="">Mis pujas</Link>
+                {username ? (<Link className={styles.navLink} href="/my_bids">Mis pujas</Link>): ""}
+              </li>
+              <li>
+                {username ? (<Link className={styles.navLink} href="/my_auctions">Mis subastas</Link>): ""}
               </li>
               <li>
                 <Link className={styles.navLink} href={"/"}>Subastas guardadas</Link>
@@ -111,9 +114,6 @@ export default function Header() {
                 <Link className={styles.navLink} href={"/"}>Calendario subastas</Link>
               </li>
             </ul>
-          </li>
-          <li className={styles.navItem}>
-            <Link className={styles.navLink} href={"/"}>🛒</Link>
           </li>
         </ul>
       </nav>
