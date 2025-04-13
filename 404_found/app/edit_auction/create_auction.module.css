@@ -13,6 +13,15 @@
     max-width: 500px;
 }
 
+.textarea {
+    border-radius: 5px;
+    border: 1px solid #cbcbcb;
+    padding: 4px;
+    margin: 4px 8px;
+    width: calc(100% - 16px);
+    max-width: 250px;
+}
+
 .h2 {
     margin: 10px 0;
     font-size: 1.5rem; 
@@ -113,6 +122,9 @@
     animation: shake 0.3s ease-in-out;
 }
 
+.ratingValue {
+    padding: 3px;
+}
 
 .error {
     color: red;
