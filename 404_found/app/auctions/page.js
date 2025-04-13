@@ -10,7 +10,9 @@ export default function Auction() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectAllCategories, setSelectAllCategories] = useState(true);
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(100000);
+  const [maxPrice, setMaxPrice] = useState(10000);
+  const [minAvailablePrice, setMinAvailablePrice] = useState(0);
+  const [maxAvailablePrice, setMaxAvailablePrice] = useState(10000);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const searchParams = useSearchParams();
@@ -24,7 +26,7 @@ export default function Auction() {
     }
   }, []);
 
-
+  // Obtener categorías
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/auctions/categories/")
       .then((response) => response.json())
@@ -36,35 +38,40 @@ export default function Auction() {
       });
   }, []);
 
-
+  // Obtener rango de precios al cargar
   useEffect(() => {
-    const params = new URLSearchParams();
-
-    if (searchQuery) {
-      params.append("texto", searchQuery);
-    }
-
-    if (!selectAllCategories && selectedCategories.length > 0) {
-      const selectedCategoryName = possibleCategories.find(
-        (cat) => cat.id === selectedCategories[0]
-      )?.name;
-      if (selectedCategoryName) {
-        params.append("categoria", selectedCategoryName);
-      }
-    }
-
-    params.append("precioMin", minPrice.toString());
-    params.append("precioMax", maxPrice.toString());
-
-    fetch(`http://127.0.0.1:8000/api/auctions/?${params.toString()}`)
-      .then((response) => response.json())
+    fetch("http://127.0.0.1:8000/api/auctions/")
+      .then((res) => res.json())
       .then((data) => {
-        setProducts(data.results);
+        const prices = data.results.map((p) => p.price);
+        const min = Math.min(...prices);
+        const max = Math.max(...prices);
+        setMinAvailablePrice(min);
+        setMaxAvailablePrice(max);
+        setMinPrice(min);
+        setMaxPrice(max);
       })
-      .catch((error) => {
-        console.error("Error al cargar subastas:", error);
-      });
-  }, [searchQuery, minPrice, maxPrice, selectedCategories, selectAllCategories, possibleCategories]);
+      .catch((err) => console.error("Error al obtener precios:", err));
+  }, []);
+
+ // Obtener productos según filtros
+ useEffect(() => {
+  const params = new URLSearchParams();
+  if (searchQuery) params.append("texto", searchQuery);
+
+  if (!selectAllCategories && selectedCategories.length > 0) {
+    const selectedName = possibleCategories.find(cat => cat.id === selectedCategories[0])?.name;
+    if (selectedName) params.append("categoria", selectedName);
+  }
+
+  params.append("precioMin", minPrice.toString());
+  params.append("precioMax", maxPrice.toString());
+
+  fetch(`http://127.0.0.1:8000/api/auctions/?${params.toString()}`)
+    .then((res) => res.json())
+    .then((data) => setProducts(data.results))
+    .catch((err) => console.error("Error al cargar subastas:", err));
+}, [searchQuery, minPrice, maxPrice, selectedCategories, selectAllCategories, possibleCategories]);
 
   const handleCategoryChange = (categoryId) => {
     setSelectedCategories((prev) =>
@@ -99,20 +106,26 @@ export default function Auction() {
         <aside className={styles.sidebar}>
           <label>Rango de Precios:</label>
           <div className={styles.priceRange}>
+            <input
+                type="range"
+                min={minAvailablePrice}
+                max={maxAvailablePrice}
+                value={minPrice}
+                onChange={(e) => {
+                  const newMin = Number(e.target.value);
+                  if (newMin <= maxPrice) setMinPrice(newMin);
+                }}
+              />
             <span>Min: {minPrice} €</span>
             <input
               type="range"
-              min="0"
-              max="100000"
-              value={minPrice}
-              onChange={(e) => setMinPrice(Number(e.target.value))}
-            />
-            <input
-              type="range"
-              min="0"
-              max="100000"
+              min={minAvailablePrice}
+              max={maxAvailablePrice}
               value={maxPrice}
-              onChange={(e) => setMaxPrice(Number(e.target.value))}
+              onChange={(e) => {
+                const newMax = Number(e.target.value);
+                if (newMax >= minPrice) setMaxPrice(newMax);
+              }}
             />
             <span>Max: {maxPrice} €</span>
           </div>
