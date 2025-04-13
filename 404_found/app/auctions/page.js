@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, Suspense } from "next/navigation";
 import styles from "./auctions.module.css";
 
 // Componente para envolver el contenido en Suspense
