@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import styles from "./my_auctions.module.css";
 
-export default function Auction() {
+function AuctionContent() {
   const [products, setProducts] = useState([]);
   const [possibleCategories, setPossibleCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -17,9 +17,10 @@ export default function Auction() {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [currentUserId, setCurrentUserId] = useState(null);
   const searchParams = useSearchParams();
+  const searchQuery = searchParams.get("search")?.toLowerCase() || "";
   const router = useRouter();
 
-  // Current authenticated user
+  // Current autenticated user
   useEffect(() => {
     const token = localStorage.getItem("access");
 
@@ -143,26 +144,23 @@ export default function Auction() {
 
   // Filters
   useEffect(() => {
-    const searchQuery = searchParams.get("search")?.toLowerCase() || "";  // Define searchQuery here
-    
     const filtered = products.filter((product) => {
       const matchesSearch =
         product.title.toLowerCase().includes(searchQuery) ||
         product.description.toLowerCase().includes(searchQuery);
-  
+
       const matchesPrice =
         product.price >= minPrice && product.price <= maxPrice;
-  
+
       const matchesCategory =
         selectedCategories.length === 0 ||
         selectedCategories.includes(product.category);
-  
+
       return matchesSearch && matchesPrice && matchesCategory;
     });
-  
+
     setFilteredProducts(filtered);
   }, [searchParams, minPrice, maxPrice, selectedCategories, products]);
-  
 
   function auctionRegister() {
     router.push("/edit_auction");
@@ -264,60 +262,66 @@ export default function Auction() {
         </aside>
 
         <section className={styles.productsContainer}>
-          <Suspense fallback={<p>Cargando subastas...</p>}>
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product) => (
-                <div key={product.id} className={styles.subasta}>
-                  <div className={styles.subastaContenido}>
-                    <div className={styles.imageWrapper}>
-                      <img
-                        src={product.thumbnail}
-                        alt={product.title}
-                        className={styles.productThumbnail}
-                      />
-                    </div>
-                    <h3 className={styles.subastaTitle}>{product.title}</h3>
-                    <section className={styles.buttonContainer}>
-                      <Link href={`/edit_auction/${product.id}`}>
-                        <button className={styles.editButton}>
-                          <Image
-                            src="/images/pencil.webp"
-                            alt="Editar"
-                            width={50}
-                            height={50}
-                            className={styles.image}
-                            priority
-                          />
-                        </button>
-                      </Link>
-
-                      <button
-                        className={styles.deleteButton}
-                        onClick={() => deleteButtonClick(product.id)}
-                      >
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product) => (
+              <div key={product.id} className={styles.subasta}>
+                <div className={styles.subastaContenido}>
+                  <div className={styles.imageWrapper}>
+                    <img
+                      src={product.thumbnail}
+                      alt={product.title}
+                      className={styles.productThumbnail}
+                    />
+                  </div>
+                  <h3 className={styles.subastaTitle}>{product.title}</h3>
+                  <section className={styles.buttonContainer}>
+                    <Link href={`/edit_auction/${product.id}`}>
+                      <button className={styles.editButton}>
                         <Image
-                          src="/images/basurita.png"
-                          alt="Eliminar"
+                          src="/images/pencil.webp"
+                          alt="Editar"
                           width={50}
                           height={50}
                           className={styles.image}
                           priority
                         />
                       </button>
-                    </section>
-                  </div>
+                    </Link>
+
+                    <button
+                      className={styles.deleteButton}
+                      onClick={() => deleteButtonClick(product.id)}
+                    >
+                      <Image
+                        src="/images/basurita.png"
+                        alt="Eliminar"
+                        width={50}
+                        height={50}
+                        className={styles.image}
+                        priority
+                      />
+                    </button>
+                  </section>
                 </div>
-              ))
-            ) : (
-              <p className={styles.noSubastas}>
-                {searchParams.get("search")
-                  ? "No se encontraron subastas con ese término."
-                  : "Cargando subastas..."}
-              </p>
-            )}
-          </Suspense>
+              </div>
+            ))
+          ) : (
+            <p className={styles.noSubastas}>
+              {searchParams.get("search")
+                ? "No se encontraron subastas con ese término."
+                : "Cargando subastas..."}
+            </p>
+          )}
         </section>
       </div>
     </main>
+  );
+}
+
+export default function Auction() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AuctionContent />
+    </Suspense>
   );
 }
