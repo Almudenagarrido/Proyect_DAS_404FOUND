@@ -235,4 +235,65 @@
     border-color: rgb(216, 143, 6);
     box-shadow: 0 0 4px rgba(216, 143, 6, 0.5);
   }
+
+  .row3 {
+    display: flex;
+    width: 95%;
+    justify-content: space-around;
+    margin: 20px 0;
+    background-color: #eaeaea;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+    gap: 15px;
+  }
+  
+  .ratingSection {
+    flex: 2;
+    min-width: 300px;
+    background-color: white;
+    padding: 1.5rem;
+    border: 2px solid #d88c00;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .commentsSection {
+    flex: 1;
+    min-width: 250px;
+    background-color: white;
+    padding: 1.5rem;
+    border: 2px dashed #aaa;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-style: italic;
+    color: #555;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  
+.ratingSelect {
+  display: 'flex';
+  gap: '1rem';
+  align-items: 'center';
+}
+
+.deleteButton {
+  background-color: #aa0000;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-weight: bold;
+}
+
+.sesion {
+  display: 'flex';
+  gap: '10px' 
+}
   
