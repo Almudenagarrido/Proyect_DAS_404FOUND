@@ -281,7 +281,7 @@ export default function ProductDetails() {
 
       <div className={styles.row2}>
         <div className={styles.imageCol}>
-          <img src={product?.thumbnail} alt={product?.title} className={styles.productImage} />
+          <img src={product?.image} alt={product?.title} className={styles.productImage} />
         </div>
         <div className={styles.descriptionCol}>
           <h3>{product?.description}</h3>
@@ -414,7 +414,7 @@ export default function ProductDetails() {
 
                   {comment.username === username && (
                     <button
-                      className={styles.deleteButton}
+                      className={styles.deleteFormButton}
                       onClick={() => handleCommentDelete(comment.id)}
                     >
                       Eliminar
@@ -426,6 +426,7 @@ export default function ProductDetails() {
           )}
 
           <div className={styles.commentForm}>
+            <p>¡Cuéntanos tu opinión!</p>
             <input
               type="text"
               value={newTitle}

@@ -279,7 +279,7 @@ export default function Auction() {
                   <div>
                     <div className={styles.imageWrapper}>
                       <img
-                        src={product.thumbnail}
+                        src={product.image}
                         alt={product.title}
                         className={styles.productThumbnail}
                       />

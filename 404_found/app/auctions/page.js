@@ -165,7 +165,7 @@ export default function Auction() {
                   <Link href={`/details/${product.id}`}>
                     <div className={styles.imageWrapper}>
                       <img
-                        src={product.thumbnail}
+                        src={product.image}
                         alt={product.title}
                         className={styles.productThumbnail}
                       />

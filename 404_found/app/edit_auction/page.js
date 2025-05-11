@@ -136,6 +136,15 @@ export default function CreateAuction() {
     router.push("/my_auctions");
   }
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFormData(prev => ({
+      ...prev,
+      photo_link: file, 
+    }));
+  };
+  
+
   return (
     <main className={styles.mainContainer}>
       <section className={styles.container}>
@@ -200,15 +209,15 @@ export default function CreateAuction() {
             ></input>
             {validationErrors.brand && <span className={styles.error}>{validationErrors.brand}</span>}
 
-            <label className={styles.label} htmlFor="photo_link">Link foto *</label>
+            <label className={styles.label} htmlFor="photo_link">Seleccionar foto *</label>
             <input
               id="photo_link"
               name="photo_link"
               className={styles.input}
-              value={formData.photo_link}
-              onChange={handleChange}
-              placeholder=""
-            ></input>
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+            />
             {validationErrors.thumbnail && <span className={styles.error}>{validationErrors.thumbnail}</span>}
 
             <label className={styles.label} htmlFor="category">Categoría *</label>
