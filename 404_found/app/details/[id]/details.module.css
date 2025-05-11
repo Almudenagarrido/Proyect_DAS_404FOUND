@@ -259,21 +259,34 @@
   }
   
   .commentsSection {
-    flex: 1;
-    min-width: 250px;
-    background-color: white;
-    padding: 1.5rem;
-    border: 2px dashed #aaa;
-    border-radius: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-style: italic;
-    color: #555;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-  }
-  
-  
+  flex: 2;
+  min-width: 300px;
+  background-color: white;
+  padding: 1.5rem;
+  border: 2px solid #d88c00;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.commentsSection h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.comment {
+  margin-bottom: 1rem;
+}
+
+.commentText {
+  font-size: 1rem;
+  color: #555;
+}
+
+.commentUser {
+  font-size: 0.9rem;
+  color: #888;
+}
+
 .ratingSelect {
   display: 'flex';
   gap: '1rem';

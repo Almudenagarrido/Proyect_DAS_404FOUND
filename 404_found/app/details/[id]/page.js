@@ -16,6 +16,9 @@ export default function ProductDetails() {
   const [newBid, setNewBid] = useState('');
   const router = useRouter();
   const [auctioneerName, setAuctioneerName] = useState('');
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
+  const [newTitle, setNewTitle] = useState('');
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
@@ -62,7 +65,7 @@ export default function ProductDetails() {
         const sortedBids = bidsData.results.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
         setBids(sortedBids);
 
-        const ratingsResponse = await fetch(`http://127.0.0.1:8000/api/ratings/?auction=${id}`, {
+        const ratingsResponse = await fetch(`http://127.0.0.1:8000/api/ratings/`, {
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
@@ -70,11 +73,16 @@ export default function ProductDetails() {
         });
         if (!ratingsResponse.ok) throw new Error("Error al obtener las valoraciones");
         const ratingsDataResponse = await ratingsResponse.json();
-        const ratingsData = ratingsDataResponse.results;
-        setRatings(ratingsData);
+        const filteredRatings = ratingsDataResponse.results.filter(rating => String(rating.auction) === String(id));
+        setRatings(filteredRatings);
 
-        const userVal = ratingsData.find(r => r.rating_username === username);
+        const userVal = filteredRatings.find(r => r.rating_username === username);
         if (userVal) setUserRating(userVal.value);
+
+        const commentsResponse = await fetch(`http://127.0.0.1:8000/api/auctions/${id}/comments/`);
+        if (!commentsResponse.ok) throw new Error("Error al obtener los comentarios");
+        const commentsData = await commentsResponse.json();
+        setComments(commentsData.results);
 
       } catch (error) {
         console.error("Error al cargar detalles:", error);
@@ -82,7 +90,7 @@ export default function ProductDetails() {
     };
 
     fetchProductDetails();
-  }, [id, ratings]);
+  }, [id]);
 
   async function handleBidSubmit() {
     if (newBid) {
@@ -152,7 +160,7 @@ export default function ProductDetails() {
       });
 
       if (response.ok) {
-        const refreshed = await fetch(`http://127.0.0.1:8000/api/ratings/?auction=${id}`, {
+        const refreshed = await fetch(`http://127.0.0.1:8000/api/ratings/`, {
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
@@ -184,7 +192,7 @@ export default function ProductDetails() {
 
       if (response.ok) {
         alert("Valoración eliminada.");
-        const refreshed = await fetch(`http://127.0.0.1:8000/api/ratings/?auction=${id}`, {
+        const refreshed = await fetch(`http://127.0.0.1:8000/api/ratings/`, {
           headers: { "Authorization": `Bearer ${token}` },
         });
         const newData = await refreshed.json();
@@ -196,6 +204,69 @@ export default function ProductDetails() {
     } catch (err) {
       console.error("Error al eliminar valoración:", err);
       alert("Error inesperado.");
+    }
+  }
+
+  async function handleCommentSubmit() {
+    if (newComment.trim() === '' || newTitle.trim() === '') {
+      alert('Por favor, completa el título y el comentario antes de enviarlo.');
+      return;
+    }
+
+    const token = localStorage.getItem('access');
+    const commentData = {
+      auction: id,
+      title: newTitle,
+      text: newComment,
+    };
+
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/auctions/${id}/comments/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(commentData),
+      });
+
+      if (response.ok) {
+        const newCommentData = await response.json();
+        setComments([newCommentData, ...comments]);
+        setNewComment('');
+        setNewTitle('');
+        alert('Comentario enviado exitosamente');
+      } else {
+        const errorData = await response.json();
+        console.error('Error en la respuesta:', errorData);
+        alert('Error al enviar el comentario');
+      }
+    } catch (error) {
+      console.error('Error al enviar el comentario:', error);
+      alert('Hubo un problema al enviar el comentario.');
+    }
+  }
+
+  async function handleCommentDelete(commentId) {
+    const token = localStorage.getItem('access');
+
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/auctions/${id}/comments/${commentId}/`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        setComments(comments.filter(comment => comment.id !== commentId));
+        alert('Comentario eliminado.');
+      } else {
+        alert('Error al eliminar el comentario');
+      }
+    } catch (error) {
+      console.error('Error al eliminar el comentario:', error);
+      alert('Hubo un problema al eliminar el comentario.');
     }
   }
 
@@ -328,8 +399,53 @@ export default function ProductDetails() {
             </div>
           )}
         </div>
-        <div className={styles.commentsSection}>Espacio para comentarios</div>
+        <div className={styles.commentsSection}>
+          <h3>Comentarios</h3>
+
+          {comments.length === 0 ? (
+            <p>No hay comentarios aún. ¡Sé el primero en comentar!</p>
+          ) : (
+            <ul className={styles.commentList}>
+              {comments.map((comment) => (
+                <li key={comment.id} className={styles.comment}>
+                  <h4 className={styles.commentTitle}>{comment.title}</h4>
+                  <p className={styles.commentText}>{comment.text}</p>
+                  <span className={styles.commentUser}>Por: {comment.username}</span>
+
+                  {comment.username === username && (
+                    <button
+                      className={styles.deleteButton}
+                      onClick={() => handleCommentDelete(comment.id)}
+                    >
+                      Eliminar
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <div className={styles.commentForm}>
+            <input
+              type="text"
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+              placeholder="Título del comentario"
+              className={styles.input}
+            />
+            <textarea
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Escribe tu comentario aquí..."
+              rows="4"
+              className={styles.textarea}
+            ></textarea>
+            <button className={styles.submitButton} onClick={handleCommentSubmit}>
+              Enviar Comentario
+            </button>
+          </div>
+        </div>
+        </div>
       </div>
-    </div>
   );
 }

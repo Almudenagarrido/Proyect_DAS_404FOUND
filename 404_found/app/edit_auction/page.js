@@ -87,7 +87,7 @@ export default function CreateAuction() {
           title: formData.name,
           price: parseFloat(formData.price),
           description: formData.description,
-          rating: formData.rating,
+          rating: 1,
           stock: formData.stock,
           brand: formData.brand,
           category: formData.category,
@@ -177,25 +177,6 @@ export default function CreateAuction() {
               type="text"
             />
             {validationErrors.price && <span className={styles.error}>{validationErrors.price}</span>}
-
-            <label className={styles.label} htmlFor="rating">Puntuación *</label>
-            <div className={styles.ratingContainer}>
-              <span>0 </span>
-              <input
-                id="rating"
-                name="rating"
-                className={styles.ratingInput}
-                type="range"
-                min="0"
-                max="5"
-                step="1"
-                value={formData.rating}
-                onChange={(e) => setFormData({ ...formData, rating: Number(e.target.value) })}
-              />
-              <span> 5</span>
-            </div>
-            <span className={styles.ratingValue}>Valor: {formData.rating}</span>
-            {validationErrors.rating && <span className={styles.error}>{validationErrors.rating}</span>}
 
             <label className={styles.label} htmlFor="stock">Cantidad *</label>
             <input
