@@ -129,7 +129,7 @@ export default function Header() {
                 <Link className={styles.navLink} href={"/"}>Historial de compras</Link>
               </li>
               <li>
-                <Link className={styles.navLink} href={"/"}>Calendario subastas</Link>
+                <Link className={styles.navLink} href={"/calendar"}>Calendario subastas</Link>
               </li>
             </ul>
           </li>

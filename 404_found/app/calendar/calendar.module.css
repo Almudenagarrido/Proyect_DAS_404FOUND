@@ -1,0 +1,44 @@
+.auctionPage {
+  padding: 40px;
+  background-color: #f8f8f8;
+}
+
+.event-content {
+  display: flex;
+  align-items: center;
+}
+
+.event-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.calendar-container {
+  align-items: center;
+  margin: 20px auto;
+  border: 5px solid rgb(216, 143, 6);
+  background-color: rgb(233, 220, 195);
+  border-radius: 10px;
+  padding: 10px;
+  margin: 20px;
+  max-width: 50%;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  color: rgb(15, 52, 47);
+  margin-left: 10px;
+}
+
+.line {
+  border: none;
+  height: 3px;
+  background-color: rgb(216, 143, 6);
+  margin: 5px 0 20px 10px;
+  width: 95%;
+}
