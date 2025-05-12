@@ -9,6 +9,7 @@ export default function Header() {
   const [search, setSearch] = useState("");
   const [username, setUsername] = useState("");  
   const router = useRouter();
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
 
   // Search
   const handleSearch = (e) => {
@@ -32,6 +33,11 @@ export default function Header() {
     localStorage.removeItem("access"); 
     window.location.reload(); 
     router.push("/login");
+  };
+
+  // Toggle dropdown visibility
+  const toggleDropdown = () => {
+    setDropdownOpen(!isDropdownOpen);
   };
 
   return (
@@ -66,23 +72,27 @@ export default function Header() {
           <li className={styles.navItem}>
             {username ? (
               <div className={styles.dropdownContainer}>
-                <button className={styles.dropbtn}>
+                <button onClick={toggleDropdown} className={styles.dropbtn}>
                   Bienvenido, {username} <i className="fa fa-caret-down" />
                 </button>
-                <div className={styles.dropdownContent}>
-                  <Link href="/user">Mi cuenta</Link>
-                  <button onClick={handleLogout} className={styles.logoutButton}>Cerrar sesión</button>
-                </div>
+                {isDropdownOpen && (
+                  <div className={styles.dropdownContent}>
+                    <Link href="/user">Mi cuenta</Link>
+                    <button onClick={handleLogout} className={styles.logoutButton}>Cerrar sesión</button>
+                  </div>
+                )}
               </div>
             ) : (
               <div className={styles.dropdownContainer}>
-                <button className={styles.dropbtn}>
+                <button onClick={toggleDropdown} className={styles.dropbtn}>
                   Identifícate <i className="fa fa-caret-down" />
                 </button>
-                <div className={styles.dropdownContent}>
-                  <Link href={"/login"}>Inicio de sesión</Link>
-                  <Link href={"/register"}>Registro</Link>
-                </div>
+                {isDropdownOpen && (
+                  <div className={styles.dropdownContent}>
+                    <Link href={"/login"}>Inicio de sesión</Link>
+                    <Link href={"/register"}>Registro</Link>
+                  </div>
+                )}
               </div>
             )}
           </li>
@@ -96,16 +106,24 @@ export default function Header() {
                 <Link className={styles.navLink} href={"/auctions"}>Subastas</Link>
               </li>
               <li>
-                {username ? (<Link className={styles.navLink} href="/my_bids">Mis pujas</Link>): ""}
-              </li>
-              <li>
-                {username ? (<Link className={styles.navLink} href="/my_auctions">Mis subastas</Link>): ""}
+                {username && (
+                  <div className={styles.dropdownContainer}>
+                    <button onClick={toggleDropdown} className={styles.dropbtn}>
+                      Mis <i className="fa fa-caret-down" />
+                    </button>
+                    {isDropdownOpen && (
+                      <div className={styles.dropdownContent}>
+                        <Link className={styles.navLink} href="/my_bids">Pujas</Link>
+                        <Link className={styles.navLink} href="/my_auctions">Subastas</Link>
+                        <Link className={styles.navLink} href="/my_ratings">Valoraciones</Link>
+                        <Link className={styles.navLink} href="/my_comments">Comentarios</Link>
+                      </div>
+                    )}
+                  </div>
+                )}
               </li>
               <li>
                 <Link className={styles.navLink} href={"/"}>Subastas guardadas</Link>
-              </li>
-              <li>
-                <Link className={styles.navLink} href={"/"}>Subastas recientes</Link>
               </li>
               <li>
                 <Link className={styles.navLink} href={"/"}>Historial de compras</Link>

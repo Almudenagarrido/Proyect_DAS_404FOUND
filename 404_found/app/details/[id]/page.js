@@ -65,7 +65,7 @@ export default function ProductDetails() {
         const sortedBids = bidsData.results.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
         setBids(sortedBids);
 
-        const ratingsResponse = await fetch(`http://127.0.0.1:8000/api/ratings/`, {
+        const ratingsResponse = await fetch(`http://127.0.0.1:8000/api/auctions/${id}/ratings`, {
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
@@ -147,8 +147,8 @@ export default function ProductDetails() {
 
       const method = existingRating ? 'PUT' : 'POST';
       const url = existingRating
-        ? `http://127.0.0.1:8000/api/ratings/${existingRating.id}/`
-        : `http://127.0.0.1:8000/api/ratings/`;
+        ? `http://127.0.0.1:8000/api/auctions/${id}/ratings/${existingRating.id}/`
+        : `http://127.0.0.1:8000/api/auctions/${id}/ratings/`;
 
       const response = await fetch(url, {
         method,
@@ -160,7 +160,7 @@ export default function ProductDetails() {
       });
 
       if (response.ok) {
-        const refreshed = await fetch(`http://127.0.0.1:8000/api/ratings/`, {
+        const refreshed = await fetch(`http://127.0.0.1:8000/api/auctions/${id}/ratings/`, {
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
@@ -185,17 +185,18 @@ export default function ProductDetails() {
     if (!existingRating) return alert("No tienes valoración para eliminar.");
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/ratings/${existingRating.id}/`, {
+      const response = await fetch(`http://127.0.0.1:8000/api/auctions/${id}/ratings/${existingRating.id}/`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
       if (response.ok) {
         alert("Valoración eliminada.");
-        const refreshed = await fetch(`http://127.0.0.1:8000/api/ratings/`, {
+        const refreshed = await fetch(`http://127.0.0.1:8000/api/auctions/${id}/ratings/`, {
           headers: { "Authorization": `Bearer ${token}` },
         });
         const newData = await refreshed.json();
+        console.log(newData);
         setRatings(newData.results);
         setUserRating(0);
       } else {

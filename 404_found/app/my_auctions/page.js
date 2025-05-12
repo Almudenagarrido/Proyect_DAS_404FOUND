@@ -126,12 +126,15 @@ export default function Auction() {
     setSelectAllCategories(!selectAllCategories);
   };
 
-  // Filter auctions
   useEffect(() => {
     const token = localStorage.getItem("access");
-    if (!currentUserId || !token) return;
-
-    fetch("http://127.0.0.1:8000/api/auctions/users/", {
+  
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+  
+    fetch("http://127.0.0.1:8000/api/users/myAuctions/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -140,16 +143,21 @@ export default function Auction() {
     })
       .then((response) => response.json())
       .then((data) => {
-        const userAuctions = data.filter(
-          (auction) => auction.auctioneer === currentUserId
-        );
-        setProducts(userAuctions);
-        setFilteredProducts(userAuctions);
+        console.log(data);
+        setProducts(data.results);
+        setFilteredProducts(data.results);
+        const prices = data.results.map((p) => p.price);
+        const min = Math.min(...prices);
+        const max = Math.max(...prices);
+        setMinAvailablePrice(min);
+        setMaxAvailablePrice(max);
+        setMinPrice(min);
+        setMaxPrice(max);
       })
       .catch((error) => {
-        console.error("Error al cargar las subastas:", error);
+        console.error("Error al obtener las subastas del usuario:", error);
       });
-  }, [currentUserId]);
+  }, []);
 
   // Filters
   useEffect(() => {
@@ -278,6 +286,7 @@ export default function Auction() {
                 <Link href={`/details/${product.id}`}>
                   <div>
                     <div className={styles.imageWrapper}>
+                      {console.log(product)}
                       <img
                         src={product.image}
                         alt={product.title}

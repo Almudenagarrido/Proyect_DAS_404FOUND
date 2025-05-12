@@ -1,0 +1,63 @@
+.myCommentsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    background-color: #f8f8f8;
+  }
+
+.header {
+width: 90%;
+margin-bottom: 20px;
+}
+
+.title {
+font-size: 32px;
+font-weight: bold;
+color: rgb(15, 52, 47);
+margin-left: 10px;
+padding: 20px;
+}
+
+.line {
+border: none;
+height: 3px;
+background-color: rgb(216, 143, 6);
+margin: 5px 0 20px 10px;
+width: 95%;
+}
+
+.commentTable {
+width: 90%;
+border-collapse: collapse;
+background-color: white;
+border-radius: 8px;
+}
+
+.commentTable th,
+.commentTable td {
+padding: 12px;
+text-align: center;
+border: 1px solid #ddd;
+}
+
+.commentTable th {
+background-color: rgb(216, 143, 6);
+color: white;
+}
+
+.link {
+color: rgb(15, 52, 47);
+cursor: pointer;
+text-decoration: underline;
+}
+
+.deleteButton {
+padding: 3px;
+border-radius: 3px;
+}
+
+.deleteButton:hover {
+background-color: lightcoral;
+border-color: red;
+}

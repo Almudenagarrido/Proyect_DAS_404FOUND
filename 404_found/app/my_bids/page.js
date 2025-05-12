@@ -39,8 +39,8 @@ export default function MyBids() {
   useEffect(() => {
     const token = localStorage.getItem('access');
     if (!user || !token) return;
-
-    fetch('http://127.0.0.1:8000/api/auctions/', {
+  
+    fetch('http://127.0.0.1:8000/api/users/myBids/', {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -49,36 +49,63 @@ export default function MyBids() {
     })
       .then((response) => response.json())
       .then((data) => {
-        const fetchBids = data.results.map((auction) =>
-          fetch(`http://127.0.0.1:8000/api/auctions/${auction.id}/bids/`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`
-            }
-          })
-            .then((response) => response.json())
-            .then((bidsData) => {
-              const userBids = bidsData.results.filter((bid) => bid.bidder_username === user.username);
-              return userBids.map((bid) => ({
-                id: bid.id,
-                product: auction.title,
-                auctionId: auction.id,
-                price: bid.price,
-                date: new Date(bid.creation_date).toLocaleString(),
-              }));
-            })
-        );
-
-        Promise.all(fetchBids)
-          .then((results) => {
-            const flattenedResults = results.flat();
-            setMyBids(flattenedResults);
-          })
-          .catch((error) => console.error('Error al obtener las pujas del usuario:', error));
+        console.log(data)
+        const bids = data.results.map((bid) => ({
+          id: bid.id,
+          product: bid.auction_title,
+          auctionId: bid.auction_id,
+          price: bid.price,
+          date: new Date(bid.creation_date).toLocaleString(),
+        }));
+        setMyBids(bids);
       })
-      .catch((error) => console.error('Error al cargar subastas:', error));
+      .catch((error) => console.error('Error al obtener las pujas del usuario:', error));
   }, [user]);
+  
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem('access');
+  //   if (!user || !token) return;
+
+  //   fetch('http://127.0.0.1:8000/api/auctions/', {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Authorization": `Bearer ${token}`
+  //     }
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       const fetchBids = data.results.map((auction) =>
+  //         fetch(`http://127.0.0.1:8000/api/auctions/${auction.id}/bids/`, {
+  //           method: "GET",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             "Authorization": `Bearer ${token}`
+  //           }
+  //         })
+  //           .then((response) => response.json())
+  //           .then((bidsData) => {
+  //             const userBids = bidsData.results.filter((bid) => bid.bidder_username === user.username);
+  //             return userBids.map((bid) => ({
+  //               id: bid.id,
+  //               product: auction.title,
+  //               auctionId: auction.id,
+  //               price: bid.price,
+  //               date: new Date(bid.creation_date).toLocaleString(),
+  //             }));
+  //           })
+  //       );
+
+  //       Promise.all(fetchBids)
+  //         .then((results) => {
+  //           const flattenedResults = results.flat();
+  //           setMyBids(flattenedResults);
+  //         })
+  //         .catch((error) => console.error('Error al obtener las pujas del usuario:', error));
+  //     })
+  //     .catch((error) => console.error('Error al cargar subastas:', error));
+  // }, [user]);
 
   const handleDelete = async (id, auctionId) => {
     const token = localStorage.getItem('access');
