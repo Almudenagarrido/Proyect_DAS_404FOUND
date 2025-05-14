@@ -53,6 +53,9 @@ export default function MyRatings() {
             productId: rating.auction_id,
             value: rating.value,
             username: rating.user,
+            price: rating.auction_price,
+            state: rating.auction_state,
+            category: rating.auction_category,
         }));
         setMyRatings(ratings);
       })
@@ -118,7 +121,10 @@ export default function MyRatings() {
         <table className={styles.ratingTable}>
           <thead>
             <tr>
-              <th>Producto</th>
+              <th>Subasta</th>
+              <th>Precio</th>
+              <th>Categoría</th>
+              <th>Estado</th>
               <th>Puntuación</th>
               <th>Acciones</th>
             </tr>
@@ -129,6 +135,9 @@ export default function MyRatings() {
                 <td onClick={() => router.push(`/products/${rating.productId}`)} className={styles.link}>
                   {rating.product}
                 </td>
+                <td>{rating.price}</td>
+                <td>{rating.category}</td>
+                <td>{rating.state ? "abierta" : "cerrada"}</td>
                 <td>
                   {editingRating === rating.id ? (
                     <>

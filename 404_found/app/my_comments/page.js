@@ -50,7 +50,10 @@ export default function MyComments() {
           text: comment.text,
           createdAt: new Date(comment.created_at).toLocaleString(),
           auctionId: comment.auction_id,
-          auctionTitle: comment.auction_title
+          auctionTitle: comment.auction_title, 
+          price: comment.auction_price,
+          category: comment.auction_category,
+          state: comment.auction_state,
         }));
         setMyComments(comments);
       })
@@ -88,6 +91,9 @@ export default function MyComments() {
               <th>Título</th>
               <th>Texto</th>
               <th>Subasta</th>
+              <th>Precio</th>
+              <th>Categoría</th>
+              <th>Estado</th>
               <th>Fecha</th>
               <th>Acciones</th>
             </tr>
@@ -103,6 +109,9 @@ export default function MyComments() {
                 >
                   {comment.auctionTitle}
                 </td>
+                <td>{comment.price}</td>
+                <td>{comment.category}</td>
+                <td>{comment.state ? "abierta" : "cerrada"}</td>
                 <td>{comment.createdAt}</td>
                 <td>
                   <button
