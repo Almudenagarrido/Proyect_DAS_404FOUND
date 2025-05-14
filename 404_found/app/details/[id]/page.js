@@ -68,7 +68,6 @@ export default function ProductDetails() {
         const ratingsResponse = await fetch(`http://127.0.0.1:8000/api/auctions/${id}/ratings`, {
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
           },
         });
         if (!ratingsResponse.ok) throw new Error("Error al obtener las valoraciones");
@@ -426,28 +425,42 @@ export default function ProductDetails() {
             </ul>
           )}
 
-          <div className={styles.commentForm}>
-            <p>¡Cuéntanos tu opinión!</p>
-            <input
-              type="text"
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-              placeholder="Título del comentario"
-              className={styles.input}
-            />
-            <textarea
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Escribe tu comentario aquí..."
-              rows="4"
-              className={styles.textarea}
-            ></textarea>
-            <button className={styles.submitButton} onClick={handleCommentSubmit}>
-              Enviar Comentario
-            </button>
-          </div>
+          {username ? (
+            <div className={styles.commentForm}>
+              <p>¡Cuéntanos tu opinión!</p>
+              <input
+                type="text"
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+                placeholder="Título del comentario"
+                className={styles.input}
+              />
+              <textarea
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Escribe tu comentario aquí..."
+                rows="4"
+                className={styles.textarea}
+              ></textarea>
+              <button className={styles.submitButton} onClick={handleCommentSubmit}>
+                Enviar Comentario
+              </button>
+            </div>
+          ) : (
+            <div className={styles.noSession}>
+              <p>¿Quieres comentar? ¡Regístrate o inicia sesión!</p>
+              <div className={styles.sesion}>
+                <button className={styles.loginButton} onClick={() => router.push("/login")}>
+                  Iniciar sesión
+                </button>
+                <button className={styles.loginButton} onClick={() => router.push("/register")}>
+                  Registrarse
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-        </div>
-      </div>
+      </div> 
+    </div>
   );
 }
