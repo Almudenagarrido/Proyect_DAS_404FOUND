@@ -14,7 +14,7 @@ export default function Auction() {
   const [minAvailablePrice, setMinAvailablePrice] = useState(0);
   const [maxAvailablePrice, setMaxAvailablePrice] = useState(10000);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [onlyOpenAuctions, setOnlyOpenAuctions] = useState(false); // Nuevo estado
+  const [onlyOpenAuctions, setOnlyOpenAuctions] = useState(false); 
 
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
@@ -69,7 +69,7 @@ export default function Auction() {
     params.append("precioMax", maxPrice.toString());
 
     if (onlyOpenAuctions) {
-      params.append("estado", "abierta"); // Ajusta el valor si tu backend usa otro término
+      params.append("estado", "abierta"); 
     }
 
     fetch(`http://127.0.0.1:8000/api/auctions/?${params.toString()}`)
@@ -83,7 +83,7 @@ export default function Auction() {
     selectedCategories,
     selectAllCategories,
     possibleCategories,
-    onlyOpenAuctions, // Dependencia añadida
+    onlyOpenAuctions, 
   ]);
 
   const handleCategoryChange = (categoryId) => {
