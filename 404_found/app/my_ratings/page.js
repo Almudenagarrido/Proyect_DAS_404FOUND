@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './my_ratings.module.css';
 import Image from "next/image";
+import Link from "next/link";
 
 export default function MyRatings() {
   const [user, setUser] = useState(null);
@@ -132,8 +133,10 @@ export default function MyRatings() {
           <tbody>
             {myRatings.map((rating) => (
               <tr key={rating.id}>
-                <td onClick={() => router.push(`/products/${rating.productId}`)} className={styles.link}>
+                <td>
+                  <Link href={`/details/${rating.productId}`}>
                   {rating.product}
+                  </Link>
                 </td>
                 <td>{rating.price}</td>
                 <td>{rating.category}</td>

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './my_comments.module.css';
 import Image from "next/image";
+import Link from "next/link";
 
 export default function MyComments() {
   const [user, setUser] = useState(null);
@@ -103,11 +104,10 @@ export default function MyComments() {
               <tr key={comment.id}>
                 <td>{comment.title}</td>
                 <td>{comment.text}</td>
-                <td
-                  onClick={() => router.push(`/details/${comment.auctionId}`)}
-                  className={styles.link}
-                >
+                <td>
+                  <Link href={`/details/${comment.auctionId}`}>
                   {comment.auctionTitle}
+                  </Link>
                 </td>
                 <td>{comment.price}</td>
                 <td>{comment.category}</td>

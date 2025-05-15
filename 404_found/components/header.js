@@ -122,12 +122,12 @@ export default function Header() {
                   </div>
                 )}
               </li>
-              <li>
+              {/* <li>
                 <Link className={styles.navLink} href={"/"}>Subastas guardadas</Link>
               </li>
               <li>
                 <Link className={styles.navLink} href={"/"}>Historial de compras</Link>
-              </li>
+              </li> */}
               <li>
                 <Link className={styles.navLink} href={"/calendar"}>Calendario subastas</Link>
               </li>
