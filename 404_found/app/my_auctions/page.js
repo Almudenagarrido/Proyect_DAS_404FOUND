@@ -1,11 +1,11 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import styles from "./my_auctions.module.css";
 
-export default function Auction() {
+function AuctionContent() {
   const [products, setProducts] = useState([]);
   const [possibleCategories, setPossibleCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -85,17 +85,20 @@ export default function Auction() {
   
    // Obtener productos según filtros
    useEffect(() => {
+
     const params = new URLSearchParams();
     if (searchQuery) params.append("texto", searchQuery);
-  
+
     if (!selectAllCategories && selectedCategories.length > 0) {
-      const selectedName = possibleCategories.find(cat => cat.id === selectedCategories[0])?.name;
+      const selectedName = possibleCategories.find(
+        (cat) => cat.id === selectedCategories[0]
+      )?.name;
       if (selectedName) params.append("categoria", selectedName);
     }
-  
+
     params.append("precioMin", minPrice.toString());
     params.append("precioMax", maxPrice.toString());
-  
+
     const token = localStorage.getItem("access");
 
     if (!token) return;
@@ -107,16 +110,24 @@ export default function Auction() {
         Authorization: `Bearer ${token}`,
       },
     })
+
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((err) => console.error("Error al cargar subastas:", err));
-  }, [searchQuery, minPrice, maxPrice, selectedCategories, selectAllCategories, possibleCategories]);
+  }, [
+    searchParams,
+    minPrice,
+    maxPrice,
+    selectedCategories,
+    selectAllCategories,
+    possibleCategories,
+  ]);
 
   const handleCategoryChange = (categoryId) => {
     setSelectedCategories((prev) =>
       prev.includes(categoryId)
         ? prev.filter((id) => id !== categoryId)
-        : [categoryId] 
+        : [categoryId]
     );
     setSelectAllCategories(false);
   };
@@ -177,7 +188,7 @@ export default function Auction() {
     });
 
     setFilteredProducts(filtered);
-  }, [searchQuery, minPrice, maxPrice, selectedCategories, products]);
+  }, [searchParams, minPrice, maxPrice, selectedCategories, products]);
 
   function auctionRegister() {
     router.push("/edit_auction");
@@ -227,16 +238,16 @@ export default function Auction() {
         <aside className={styles.sidebar}>
           <label>Rango de Precios:</label>
           <div className={styles.priceRange}>
-          <input
-                type="range"
-                min={minAvailablePrice}
-                max={maxAvailablePrice}
-                value={minPrice}
-                onChange={(e) => {
-                  const newMin = Number(e.target.value);
-                  if (newMin <= maxPrice) setMinPrice(newMin);
-                }}
-              />
+            <input
+              type="range"
+              min={minAvailablePrice}
+              max={maxAvailablePrice}
+              value={minPrice}
+              onChange={(e) => {
+                const newMin = Number(e.target.value);
+                if (newMin <= maxPrice) setMinPrice(newMin);
+              }}
+            />
             <span>Min: {minPrice} €</span>
             <input
               type="range"
@@ -330,7 +341,7 @@ export default function Auction() {
             ))
           ) : (
             <p className={styles.noSubastas}>
-              {searchQuery
+              {searchParams.get("search")
                 ? "No se encontraron subastas con ese término."
                 : "Cargando subastas..."}
             </p>
@@ -338,5 +349,13 @@ export default function Auction() {
         </section>
       </div>
     </main>
+  );
+}
+
+export default function Auction() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AuctionContent />
+    </Suspense>
   );
 }
