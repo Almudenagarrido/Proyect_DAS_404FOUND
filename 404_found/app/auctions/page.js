@@ -15,6 +15,7 @@ function AuctionContent() {
   const [minAvailablePrice, setMinAvailablePrice] = useState(0);
   const [maxAvailablePrice, setMaxAvailablePrice] = useState(10000);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [onlyOpenAuctions, setOnlyOpenAuctions] = useState(false); 
 
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
@@ -55,30 +56,42 @@ function AuctionContent() {
       .catch((err) => console.error("Error al obtener precios:", err));
   }, []);
 
- // Obtener productos según filtros
- useEffect(() => {
-  const params = new URLSearchParams();
-  if (searchQuery) params.append("texto", searchQuery);
+  // Obtener productos según filtros
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (searchQuery) params.append("texto", searchQuery);
 
-  if (!selectAllCategories && selectedCategories.length > 0) {
-    const selectedName = possibleCategories.find(cat => cat.id === selectedCategories[0])?.name;
-    if (selectedName) params.append("categoria", selectedName);
-  }
+    if (!selectAllCategories && selectedCategories.length > 0) {
+      const selectedName = possibleCategories.find(cat => cat.id === selectedCategories[0])?.name;
+      if (selectedName) params.append("categoria", selectedName);
+    }
 
-  params.append("precioMin", minPrice.toString());
-  params.append("precioMax", maxPrice.toString());
+    params.append("precioMin", minPrice.toString());
+    params.append("precioMax", maxPrice.toString());
 
-  fetch(`http://127.0.0.1:8000/api/auctions/?${params.toString()}`)
-    .then((res) => res.json())
-    .then((data) => setProducts(data.results))
-    .catch((err) => console.error("Error al cargar subastas:", err));
-}, [searchQuery, minPrice, maxPrice, selectedCategories, selectAllCategories, possibleCategories]);
+    if (onlyOpenAuctions) {
+      params.append("estado", "abierta"); 
+    }
+
+    fetch(`http://127.0.0.1:8000/api/auctions/?${params.toString()}`)
+      .then((res) => res.json())
+      .then((data) => setProducts(data.results))
+      .catch((err) => console.error("Error al cargar subastas:", err));
+  }, [
+    searchQuery,
+    minPrice,
+    maxPrice,
+    selectedCategories,
+    selectAllCategories,
+    possibleCategories,
+    onlyOpenAuctions, 
+  ]);
 
   const handleCategoryChange = (categoryId) => {
     setSelectedCategories((prev) =>
       prev.includes(categoryId)
         ? prev.filter((id) => id !== categoryId)
-        : [categoryId] 
+        : [categoryId]
     );
     setSelectAllCategories(false);
   };
@@ -86,6 +99,10 @@ function AuctionContent() {
   const handleSelectAllChange = () => {
     setSelectedCategories([]);
     setSelectAllCategories(!selectAllCategories);
+  };
+
+  const handleSelectOpenAuctions = (e) => {
+    setOnlyOpenAuctions(e.target.checked);
   };
 
   const handleEmptyAction = () => {
@@ -108,15 +125,15 @@ function AuctionContent() {
           <label>Rango de Precios:</label>
           <div className={styles.priceRange}>
             <input
-                type="range"
-                min={minAvailablePrice}
-                max={maxAvailablePrice}
-                value={minPrice}
-                onChange={(e) => {
-                  const newMin = Number(e.target.value);
-                  if (newMin <= maxPrice) setMinPrice(newMin);
-                }}
-              />
+              type="range"
+              min={minAvailablePrice}
+              max={maxAvailablePrice}
+              value={minPrice}
+              onChange={(e) => {
+                const newMin = Number(e.target.value);
+                if (newMin <= maxPrice) setMinPrice(newMin);
+              }}
+            />
             <span>Min: {minPrice} €</span>
             <input
               type="range"
@@ -156,6 +173,17 @@ function AuctionContent() {
               </div>
             ))}
           </div>
+
+          <label>Estado:</label>
+          <div className={styles.categories}>
+            <input
+              type="checkbox"
+              id="selectOpenAuctions"
+              checked={onlyOpenAuctions}
+              onChange={handleSelectOpenAuctions}
+            />
+            <label htmlFor="selectOpenAuctions">abiertas</label>
+          </div>
         </aside>
 
         <section className={styles.productsContainer}>
@@ -166,7 +194,7 @@ function AuctionContent() {
                   <Link href={`/details/${product.id}`}>
                     <div className={styles.imageWrapper}>
                       <img
-                        src={product.thumbnail}
+                        src={product.image}
                         alt={product.title}
                         className={styles.productThumbnail}
                       />
