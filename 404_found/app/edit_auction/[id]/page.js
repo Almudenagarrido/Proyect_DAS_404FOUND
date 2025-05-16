@@ -132,36 +132,36 @@ export default function EditAuction() {
     try {
       const token = localStorage.getItem("access");
 
+      const form = new FormData();
+      form.append("title", formData.name);
+      form.append("price", formData.price);
+      form.append("description", formData.description);
+      form.append("rating", 1);  
+      form.append("stock", formData.stock);
+      form.append("brand", formData.brand);
+      form.append("category", formData.category);
+      form.append("image", formData.photo_link);  
+      form.append("closing_date", formData.closing_date);  
+      form.append("auctioneer", userData.id);
+      
       const response = await fetch(`http://127.0.0.1:8000/api/auctions/${id}/`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({
-          title: formData.name,
-          price: parseFloat(formData.price),
-          description: formData.description,
-          rating: parseFloat(formData.rating),
-          stock: parseInt(formData.stock),
-          brand: formData.brand,
-          category: formData.category,
-          thumbnail: formData.photo_link,
-          closing_date: formData.closing_date,
-          auctioneer: userData.id
-        })
+        body: form,
       });
 
       if (!response.ok) {
         if (response.status === 400) {
           const errorData = await response.json();
           setValidationErrors(errorData);
+          console.log(errorData);
         } else {
           throw new Error("Error al editar la subasta");
         }
         return;
       }
-
       router.push(`/details/${id}`);
     } catch (err) {
       console.error("Error al actualizar:", err);
@@ -171,6 +171,14 @@ export default function EditAuction() {
 
   const discardChanges = () => {
     router.push("/my_auctions");
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFormData(prev => ({
+      ...prev,
+      photo_link: file, 
+    }));
   };
 
   return (
@@ -212,25 +220,6 @@ export default function EditAuction() {
             />
             {validationErrors.price && <span className={styles.error}>{validationErrors.price}</span>}
 
-            <label className={styles.label} htmlFor="rating">Puntuación *</label>
-            <div className={styles.ratingContainer}>
-              <span>0</span>
-              <input
-                id="rating"
-                name="rating"
-                className={styles.ratingInput}
-                type="range"
-                min="0"
-                max="5"
-                step="1"
-                value={formData.rating}
-                onChange={(e) => setFormData({ ...formData, rating: Number(e.target.value) })}
-              />
-              <span>5</span>
-            </div>
-            <span className={styles.ratingValue}>Valor: {formData.rating}</span>
-            {validationErrors.rating && <span className={styles.error}>{validationErrors.rating}</span>}
-
             <label className={styles.label} htmlFor="stock">Cantidad *</label>
             <input
               id="stock"
@@ -251,13 +240,14 @@ export default function EditAuction() {
             />
             {validationErrors.brand && <span className={styles.error}>{validationErrors.brand}</span>}
 
-            <label className={styles.label} htmlFor="photo_link">Link foto *</label>
+            <label className={styles.label} htmlFor="photo_link">Seleccionar foto *</label>
             <input
               id="photo_link"
               name="photo_link"
               className={styles.input}
-              value={formData.photo_link}
-              onChange={handleChange}
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
             />
             {validationErrors.thumbnail && <span className={styles.error}>{validationErrors.thumbnail}</span>}
 

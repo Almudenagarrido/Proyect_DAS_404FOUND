@@ -60,10 +60,19 @@ export default function Auction() {
 
     // Obtener rango de precios al cargar
     useEffect(() => {
-      fetch("http://127.0.0.1:8000/api/auctions/")
+      const token = localStorage.getItem("access");
+      if (!token) return;
+
+      fetch("http://127.0.0.1:8000/api/auctions/users/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((res) => res.json())
         .then((data) => {
-          const prices = data.results.map((p) => p.price);
+          const prices = data.map((p) => p.price);
           const min = Math.min(...prices);
           const max = Math.max(...prices);
           setMinAvailablePrice(min);
@@ -87,9 +96,19 @@ export default function Auction() {
     params.append("precioMin", minPrice.toString());
     params.append("precioMax", maxPrice.toString());
   
-    fetch(`http://127.0.0.1:8000/api/auctions/?${params.toString()}`)
+    const token = localStorage.getItem("access");
+
+    if (!token) return;
+
+    fetch(`http://127.0.0.1:8000/api/auctions/users/?${params.toString()}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
-      .then((data) => setProducts(data.results))
+      .then((data) => setProducts(data))
       .catch((err) => console.error("Error al cargar subastas:", err));
   }, [searchQuery, minPrice, maxPrice, selectedCategories, selectAllCategories, possibleCategories]);
 
@@ -107,12 +126,15 @@ export default function Auction() {
     setSelectAllCategories(!selectAllCategories);
   };
 
-  // Filter auctions
   useEffect(() => {
     const token = localStorage.getItem("access");
-    if (!currentUserId || !token) return;
-
-    fetch("http://127.0.0.1:8000/api/auctions/", {
+  
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+  
+    fetch("http://127.0.0.1:8000/api/users/myAuctions/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -121,16 +143,21 @@ export default function Auction() {
     })
       .then((response) => response.json())
       .then((data) => {
-        const userAuctions = data.results.filter(
-          (auction) => auction.auctioneer === currentUserId
-        );
-        setProducts(userAuctions);
-        setFilteredProducts(userAuctions);
+        console.log(data);
+        setProducts(data.results);
+        setFilteredProducts(data.results);
+        const prices = data.results.map((p) => p.price);
+        const min = Math.min(...prices);
+        const max = Math.max(...prices);
+        setMinAvailablePrice(min);
+        setMaxAvailablePrice(max);
+        setMinPrice(min);
+        setMaxPrice(max);
       })
       .catch((error) => {
-        console.error("Error al cargar las subastas:", error);
+        console.error("Error al obtener las subastas del usuario:", error);
       });
-  }, [currentUserId]);
+  }, []);
 
   // Filters
   useEffect(() => {
@@ -255,45 +282,51 @@ export default function Auction() {
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
               <div key={product.id} className={styles.subasta}>
-                <div className={styles.subastaContenido}>
-                  <div className={styles.imageWrapper}>
-                    <img
-                      src={product.thumbnail}
-                      alt={product.title}
-                      className={styles.productThumbnail}
-                    />
+              <div className={styles.subastaContenido}>
+                <Link href={`/details/${product.id}`}>
+                  <div>
+                    <div className={styles.imageWrapper}>
+                      {console.log(product)}
+                      <img
+                        src={product.image}
+                        alt={product.title}
+                        className={styles.productThumbnail}
+                      />
+                    </div>
+                    <h3 className={styles.subastaTitle}>{product.title}</h3>
                   </div>
-                  <h3 className={styles.subastaTitle}>{product.title}</h3>
-                  <section className={styles.buttonContainer}>
-                    <Link href={`/edit_auction/${product.id}`}>
-                      <button className={styles.editButton}>
-                        <Image
-                          src="/images/pencil.webp"
-                          alt="Editar"
-                          width={50}
-                          height={50}
-                          className={styles.image}
-                          priority
-                        />
-                      </button>
-                    </Link>
+                </Link>
 
-                    <button
-                      className={styles.deleteButton}
-                      onClick={() => deleteButtonClick(product.id)}
-                    >
+                <section className={styles.buttonContainer}>
+                  <Link href={`/edit_auction/${product.id}`}>
+                    <button className={styles.editButton}>
                       <Image
-                        src="/images/basurita.png"
-                        alt="Eliminar"
+                        src="/images/pencil.webp"
+                        alt="Editar"
                         width={50}
                         height={50}
                         className={styles.image}
                         priority
                       />
                     </button>
-                  </section>
-                </div>
+                  </Link>
+
+                  <button
+                    className={styles.deleteButton}
+                    onClick={() => deleteButtonClick(product.id)}
+                  >
+                    <Image
+                      src="/images/basurita.png"
+                      alt="Eliminar"
+                      width={50}
+                      height={50}
+                      className={styles.image}
+                      priority
+                    />
+                  </button>
+                </section>
               </div>
+            </div>
             ))
           ) : (
             <p className={styles.noSubastas}>
